@@ -32,6 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
@@ -65,10 +66,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
     private void signUp(){
+
         String user = fullName.getText().toString().trim();
         String email = signUpEmail.getText().toString().trim();
         String pass = signUpPassword.getText().toString().trim();
-        String comfirmPass = confirmPassword.getText().toString().trim();
+        String confirmPass = confirmPassword.getText().toString().trim();
+
 
         if(user.isEmpty() || email.isEmpty() || pass.isEmpty()) {
             Toast.makeText(SignUpActivity.this, "Please Fill Out All Fields", Toast.LENGTH_SHORT).show();
@@ -79,11 +82,13 @@ public class SignUpActivity extends AppCompatActivity {
         if(!PASSWORD_PATTERN.matcher(pass).matches()){
             Toast.makeText(SignUpActivity.this, "Must Be A Strong Password", Toast.LENGTH_SHORT).show();
         }
-        if(!pass.equals(comfirmPass)){
+        if(!pass.equals(confirmPass)){
             Toast.makeText(SignUpActivity.this, "Password Does Not Match.", Toast.LENGTH_SHORT).show();
         }
         else{
+
             mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this, task-> {
+
                 if (task.isSuccessful()) {
                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
                     firebaseUser.sendEmailVerification();
@@ -104,4 +109,6 @@ public class SignUpActivity extends AppCompatActivity {
             });
          }
     }
+
+
 }

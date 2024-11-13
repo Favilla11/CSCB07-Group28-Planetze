@@ -21,4 +21,5 @@ public class LogInActivity extends AppCompatActivity {
             return insets;
         });
     }
+
 }
