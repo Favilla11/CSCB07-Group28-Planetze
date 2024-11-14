@@ -79,13 +79,13 @@ public class SignUpActivity extends AppCompatActivity {
         if(user.isEmpty() || email.isEmpty() || pass.isEmpty()) {
             Toast.makeText(SignUpActivity.this, "Please Fill Out All Fields", Toast.LENGTH_SHORT).show();
         }
-        if(!EMAIL_PATTERN.matcher(email).matches()){
+        else if(!EMAIL_PATTERN.matcher(email).matches()){
             Toast.makeText(SignUpActivity.this, "Invalid Email Address.", Toast.LENGTH_SHORT).show();
         }
-        if(!PASSWORD_PATTERN.matcher(pass).matches()){
+        else if(!PASSWORD_PATTERN.matcher(pass).matches()){
             Toast.makeText(SignUpActivity.this, "Must Be A Strong Password", Toast.LENGTH_SHORT).show();
         }
-        if(!pass.equals(confirmPass)){
+        else if(!pass.equals(confirmPass)){
             Toast.makeText(SignUpActivity.this, "Password Does Not Match.", Toast.LENGTH_SHORT).show();
         }
         else{
