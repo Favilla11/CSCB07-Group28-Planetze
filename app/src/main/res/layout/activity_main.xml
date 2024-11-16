@@ -1,19 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@android:color/transparent">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="254dp"
+        android:background="#FCFCFC"
+        app:srcCompat="@drawable/planetze_logo" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/slogan1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="260dp"
+        android:layout_marginLeft="40dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="ACTION"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/black2"
+        android:textSize="65sp"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/slogan2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="340dp"
+        android:layout_marginLeft="40dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="FOR"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/grey"
+        android:textSize="55sp"
+        />
+
+    <TextView
+        android:id="@+id/slogan3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="400dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="CLIMATE"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/white"
+        android:textSize="70sp"
+        />
+
+    <TextView
+        android:id="@+id/slogan4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="840dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Your Choice Can Save the PLANET"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/grey"
+        android:textSize="20sp"
+        />
+
+</RelativeLayout>
