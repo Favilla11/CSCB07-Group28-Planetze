@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal">
-
+            
             <!-- Question Text -->
             <TextView
                 android:id="@+id/questionText"
@@ -36,6 +36,81 @@
                 android:orientation="vertical"
                 android:layout_marginBottom="30dp"/>
 
+	    <!-- regionLabel selectors -->
+            <TextView
+                android:id="@+id/regionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Region:"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Region Selection Spinner -->
+            <Spinner
+                android:id="@+id/regionSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Beef frequency selectors -->
+            <TextView
+                android:id="@+id/beefLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Beef Frequency:"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+            <Spinner
+                android:id="@+id/beefSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"/>
+
+            <!-- Pork frequency selectors -->
+            <TextView
+                android:id="@+id/porkLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pork Frequency:"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+            <Spinner
+                android:id="@+id/porkSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"/>
+
+            <!-- Chicken frequency selectors -->
+            <TextView
+                android:id="@+id/chickenLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chicken Frequency:"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+            <Spinner
+                android:id="@+id/chickenSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone"/>
+
+            <!-- Fish frequency selectors -->
+            <TextView
+                android:id="@+id/fishLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fish Frequency:"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+            <Spinner
+                android:id="@+id/fishSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="gone"/>
+
             <!-- Next Button -->
             <Button
                 android:id="@+id/nextButton"
@@ -47,5 +122,4 @@
 
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
