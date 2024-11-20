@@ -2,12 +2,15 @@ package com.example.cscb07_project;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -48,11 +51,9 @@ public class MainActivity extends AppCompatActivity {
         fade.setDuration(1800);
         fade.setStartOffset(400);
         fade.setFillAfter(true);
-
         TranslateAnimation slide = new TranslateAnimation(0,0,1000,0);
         slide.setDuration(1800);
         slide.setStartOffset(400);
-
         animation.addAnimation(fade);
         animation.addAnimation(slide);
         slogan1.startAnimation(animation);
@@ -60,9 +61,32 @@ public class MainActivity extends AppCompatActivity {
         slogan3.startAnimation(animation);
 
 
+        //navigate to Login page
+        Button LoginButton = findViewById(R.id.LoginButton);
+        LoginButton.setBackgroundResource(R.drawable.button_gradient);
+        LoginButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        //navigate to Signup page
+        Button SignupButton = findViewById(R.id.SignupButton);
+        SignupButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         // onStart()
         //    FirebaseUser currentUser = mAuth.getCurrentUser();
         //    updateUI(currentUser);
     }
+
 }
