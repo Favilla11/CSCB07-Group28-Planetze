@@ -83,16 +83,14 @@ public class QuestionnaireActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "Failed to load region data", Toast.LENGTH_SHORT).show();
         }
-        ArrayAdapter<String> regionAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                new String[]{"Afghanistan", "Algeria", "Argentina", "Australia"});
-        meatFrequencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        regionSpinner.setAdapter(regionAdapter);
+        // ArrayAdapter<String> regionAdapter = new ArrayAdapter<>(this,
+        //         android.R.layout.simple_spinner_item,
+        //         new String[]{"Afghanistan", "Algeria", "Argentina", "Australia"});
+        // meatFrequencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // regionSpinner.setAdapter(regionAdapter);
 
         setupOptionListeners();
         displayRegionSelection();
-
-        // displayQuestion();
 
         nextButton.setOnClickListener(view -> next());
     }
@@ -220,13 +218,13 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private void initRegions() throws IOException {
         ArrayList<String> regions = new ArrayList<>();
 
-        try (InputStream inputStream = getAssets().open("D:\\CSCB07-Group28-Planetze\\app\\build\\intermediates\\assets\\Global_Averages.csv");
+        try (InputStream inputStream = getAssets().open("Global_Averages.csv");
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
+            String line = reader.readLine();
 
+            while ((line = reader.readLine()) != null) {
                 System.out.println(line);
-                String[] parts = line.split("\t");
+                String[] parts = line.split(",");
                 if (parts.length > 0) {
                     regions.add(parts[0]);
                 }
@@ -239,7 +237,5 @@ public class QuestionnaireActivity extends AppCompatActivity {
         regionSpinner.setAdapter(regionAdapter);
     }
 }
-
-
 
 
