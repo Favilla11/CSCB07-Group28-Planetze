@@ -2,7 +2,10 @@ package com.example.cscb07_project;
 
 import java.io.IOException;
 import java.io.File;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -33,9 +36,12 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private Button nextButton;
     private TextView questionText;
     private HashMap<Integer, String> storedAnswer = new HashMap<>();
+    private HashMap<String, String> regionToValue = new HashMap<>();
+    private String countryName, countryAverage;
+    private boolean isQuestionnaireComplete = false;
     private Spinner beefSpinner, porkSpinner, chickenSpinner, fishSpinner, regionSpinner;
 
-    private ArrayList<String> regions;
+    private ArrayList<String> regions = new ArrayList<>();
     private HashMap<String, Spinner> spinnerMap;
 
     private boolean isAddressSelected = false;
@@ -83,17 +89,27 @@ public class QuestionnaireActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "Failed to load region data", Toast.LENGTH_SHORT).show();
         }
-        // ArrayAdapter<String> regionAdapter = new ArrayAdapter<>(this,
-        //         android.R.layout.simple_spinner_item,
-        //         new String[]{"Afghanistan", "Algeria", "Argentina", "Australia"});
-        // meatFrequencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // regionSpinner.setAdapter(regionAdapter);
 
         setupOptionListeners();
         displayRegionSelection();
 
-        nextButton.setOnClickListener(view -> next());
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isQuestionnaireComplete) {
+                    Intent intent = new Intent(QuestionnaireActivity.this, DisplayResultActivity.class);
+                    intent.putExtra("userResponse", storedAnswer);
+                    intent.putExtra("countryName", countryName);
+                    intent.putExtra("countryAverage", countryAverage);
+                    startActivity(intent);
+                } else {
+                    next();
+                }
+
+            }
+        });
     }
+
 
     private void displayRegionSelection() {
         questionText.setText("Please select your region:");
@@ -123,7 +139,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
     private void displayQuestion() {
         Question currentQuestion = questionList.get(currentQuestionIndex);
-        questionText.setText(currentQuestion.getQuestionText());
+        String displayText = currentQuestion.getQuestionId() + "." + " "  + currentQuestion.getQuestionText();
+        questionText.setText(displayText);
         radioGroup.removeAllViews();
         findViewById(R.id.regionLabel).setVisibility(View.GONE);
         findViewById(R.id.regionSpinner).setVisibility(View.GONE);
@@ -161,13 +178,14 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
     private void next() {
         if (!isAddressSelected) {
-            String selectedRegion = regionSpinner.getSelectedItem().toString();
-            storedAnswer.put(0, selectedRegion);
+            countryName = regionSpinner.getSelectedItem().toString();
+            countryAverage = regionToValue.get(countryName);
             isAddressSelected = true;
 
             currentQuestionIndex = 0;
             displayQuestion();
         } else{
+
             Question currentQuestion = questionList.get(currentQuestionIndex);
             if (currentQuestion.getQuestionId() == 9) {
                 String beefFrequency = beefSpinner.getSelectedItem().toString();
@@ -180,28 +198,26 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
                 storedAnswer.put(currentQuestion.getQuestionId(), answer);
                 currentQuestionIndex = getNextQuestionIndex(currentQuestionIndex, answer);
-                if (currentQuestionIndex < questionList.size()) {
-                    displayQuestion();
-                } else {
-                    questionText.setText("Thank you for completing the questionnaire!");
-                    nextButton.setVisibility(View.GONE);
-                }
+                displayQuestion();
             } else {
                 int selectedId = radioGroup.getCheckedRadioButtonId();
-                if (selectedId == -1) {
+                RadioButton selectedOption = findViewById(selectedId);
+                if (selectedOption == null){
                     Toast.makeText(QuestionnaireActivity.this, "Please Select A Choice", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                RadioButton selectedOption = findViewById(selectedId);
                 String answer = selectedOption.getText().toString();
                 storedAnswer.put(currentQuestion.getQuestionId(), answer);
                 currentQuestionIndex = getNextQuestionIndex(currentQuestionIndex, answer);
                 if (currentQuestionIndex < questionList.size()) {
                     displayQuestion();
                 } else {
+                    isQuestionnaireComplete = true;
                     questionText.setText("Thank you for completing the questionnaire!");
-                    nextButton.setVisibility(View.GONE);
+                    radioGroup.setVisibility(View.GONE);
+                    nextButton.setText("See the result ->");
                 }
+
             }
         }
     }
@@ -216,7 +232,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
         return index + 1;
     }
     private void initRegions() throws IOException {
-        ArrayList<String> regions = new ArrayList<>();
 
         try (InputStream inputStream = getAssets().open("Global_Averages.csv");
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -227,6 +242,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
                 String[] parts = line.split(",");
                 if (parts.length > 0) {
                     regions.add(parts[0]);
+                    regionToValue.put(parts[0], parts[1].trim());
                 }
             }
         }
