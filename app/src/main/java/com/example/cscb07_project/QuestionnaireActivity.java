@@ -2,6 +2,8 @@ package com.example.cscb07_project;
 
 import java.io.IOException;
 import java.io.File;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -33,9 +35,11 @@ public class QuestionnaireActivity extends AppCompatActivity {
     private Button nextButton;
     private TextView questionText;
     private HashMap<Integer, String> storedAnswer = new HashMap<>();
+    private HashMap<String, Integer> countryValue = new HashMap<>();
+
     private Spinner beefSpinner, porkSpinner, chickenSpinner, fishSpinner, regionSpinner;
 
-    private ArrayList<String> regions;
+    private ArrayList<String> regions = new ArrayList<>();
     private HashMap<String, Spinner> spinnerMap;
 
     private boolean isAddressSelected = false;
@@ -85,15 +89,12 @@ public class QuestionnaireActivity extends AppCompatActivity {
         }
         ArrayAdapter<String> regionAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
-                new String[]{"Afghanistan", "Algeria", "Argentina", "Australia"});
+                regions);
         meatFrequencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         regionSpinner.setAdapter(regionAdapter);
 
         setupOptionListeners();
         displayRegionSelection();
-
-        // displayQuestion();
-
         nextButton.setOnClickListener(view -> next());
     }
 
@@ -125,7 +126,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
     private void displayQuestion() {
         Question currentQuestion = questionList.get(currentQuestionIndex);
-        questionText.setText(currentQuestion.getQuestionText());
+        String displayText = currentQuestion.getQuestionId() + " " + currentQuestion.getQuestionText();
+        questionText.setText(displayText);
         radioGroup.removeAllViews();
         findViewById(R.id.regionLabel).setVisibility(View.GONE);
         findViewById(R.id.regionSpinner).setVisibility(View.GONE);
@@ -182,12 +184,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
                 storedAnswer.put(currentQuestion.getQuestionId(), answer);
                 currentQuestionIndex = getNextQuestionIndex(currentQuestionIndex, answer);
-                if (currentQuestionIndex < questionList.size()) {
-                    displayQuestion();
-                } else {
-                    questionText.setText("Thank you for completing the questionnaire!");
-                    nextButton.setVisibility(View.GONE);
-                }
+                displayQuestion();
             } else {
                 int selectedId = radioGroup.getCheckedRadioButtonId();
                 if (selectedId == -1) {
@@ -202,7 +199,12 @@ public class QuestionnaireActivity extends AppCompatActivity {
                     displayQuestion();
                 } else {
                     questionText.setText("Thank you for completing the questionnaire!");
-                    nextButton.setVisibility(View.GONE);
+                    nextButton.setText("See the result ->");
+                    radioGroup.setVisibility(View.GONE);
+//
+//                    Intent intent = new Intent(QuestionnaireActivity.this, DisplayResultActivity.class);
+//                    intent.putExtra("userResponse", storedAnswer);
+//                    toResultPage();
                 }
             }
         }
@@ -218,7 +220,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
         return index + 1;
     }
     private void initRegions() throws IOException {
-        ArrayList<String> regions = new ArrayList<>();
 
         try (InputStream inputStream = getAssets().open("D:\\CSCB07-Group28-Planetze\\app\\build\\intermediates\\assets\\Global_Averages.csv");
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -238,6 +239,11 @@ public class QuestionnaireActivity extends AppCompatActivity {
         regionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         regionSpinner.setAdapter(regionAdapter);
     }
+//    private void toResultPage() {
+//        Intent intent = new Intent(QuestionnaireActivity.this, DisplayResultActivity.class);
+//        startActivity(intent);
+//        finish();
+//    }
 }
 
 
