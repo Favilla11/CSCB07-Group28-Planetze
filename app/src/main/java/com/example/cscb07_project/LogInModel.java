@@ -32,20 +32,6 @@ public class LogInModel {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d("MyApp", "login successful");
-
-                boolean newuser = task.getResult().getAdditionalUserInfo().isNewUser();
-                Log.d("AAA", "onComplete: " + (newuser ? "new user" : "old user"));
-
-                if(newuser){
-
-                    //Do Stuffs for new user
-                    Log.d("MyApp", "is new user");
-
-                }else{
-
-                    Log.d("MyApp", "not new user");
-                }
-
                 listener.onSuccess();
             } else {
                 Log.d("MyApp", "Login failed");
