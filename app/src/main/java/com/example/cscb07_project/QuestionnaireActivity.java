@@ -97,11 +97,13 @@ public class QuestionnaireActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isQuestionnaireComplete) {
-                    Intent intent = new Intent(QuestionnaireActivity.this, DisplayResultActivity.class);
-                    intent.putExtra("userResponse", storedAnswer);
-                    intent.putExtra("countryName", countryName);
-                    intent.putExtra("countryAverage", countryAverage);
-                    startActivity(intent);
+                    Intent intent1 = new Intent(QuestionnaireActivity.this, DisplayResultActivity.class);
+                    intent1.putExtra("userResponse", storedAnswer);
+                    Intent intent2 = new Intent(QuestionnaireActivity.this, CompareActivity.class);
+                    intent2.putExtra("countryName", countryName);
+                    intent2.putExtra("countryAverage", countryAverage);
+                    startActivity(intent1);
+                    finish();;
                 } else {
                     next();
                 }
