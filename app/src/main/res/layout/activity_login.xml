@@ -121,5 +121,18 @@
         android:textSize="16sp"
         android:textStyle="bold"/>
 
+    <TextView
+        android:id="@+id/ForgetPassword"
+        android:layout_width="123dp"
+        android:layout_height="29dp"
+        android:layout_alignBottom="@+id/logInPassword"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="-41dp"
+        android:text="@string/forget_password"
+        android:textAlignment="textEnd"
+        android:textColor="@color/grey"
+        android:textStyle="bold"/>
+
 
 </RelativeLayout>

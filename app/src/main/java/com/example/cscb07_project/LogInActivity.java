@@ -27,6 +27,7 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
     private Button loginButton;
     private LogInPresenter presenter;
     private TextView redirectToSignUp;
+    private TextView forgotPasswordText;
 
 
     @Override
@@ -38,6 +39,7 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
         passwordEditText = findViewById(R.id.logInPassword);
         loginButton = findViewById(R.id.logInButton);
         redirectToSignUp = findViewById(R.id.redirectToSignUp);
+        forgotPasswordText = findViewById(R.id.ForgetPassword);
 
         presenter = new LogInPresenter(this);
 
@@ -55,6 +57,15 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
                 finish();
             }
         });
+
+        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LogInActivity.this, ResetPasswordActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } );
 
     }
 
@@ -82,8 +93,8 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
     public void navigateToHome() {
         // TODO: set after Home Activity is implemented
         // Navigate to the home screen
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-        finish();
+        //Intent intent = new Intent(this, HomeActivity.class);
+        //startActivity(intent);
+        //finish();
     }
 }
