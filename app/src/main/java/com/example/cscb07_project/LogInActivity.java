@@ -7,9 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import android.widget.Toast;
-import android.widget.VideoView;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LogInActivity extends AppCompatActivity implements LogInView {
@@ -73,8 +70,8 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
     public void navigateToHome() {
         // TODO: set after Home Activity is implemented
         // Navigate to the home screen
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-        finish();
+        //Intent intent = new Intent(this, HomeActivity.class);
+        //startActivity(intent);
+        //finish();
     }
 }
