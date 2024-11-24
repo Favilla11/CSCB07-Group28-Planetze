@@ -1,19 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@android:color/transparent">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="254dp"
+        android:background="#FCFCFC"
+        app:srcCompat="@drawable/planetze_logo" />
 
     <TextView
+        android:id="@+id/slogan1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="260dp"
+        android:layout_marginStart="40dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/action"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/black2"
+        android:textSize="65sp"
+        />
+
+    <TextView
+        android:id="@+id/slogan2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="340dp"
+        android:layout_marginLeft="40dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/For"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/grey"
+        android:textSize="55sp"
+        />
+
+    <TextView
+        android:id="@+id/slogan3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="400dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/climate"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/white"
+        android:textSize="70sp" />
+
+    <TextView
+        android:id="@+id/slogan4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="840dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/your_choice_can_save_the_planet"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/grey"
+        android:textSize="20sp"
+        />
+
+    <Button
+        android:id="@+id/LoginButton"
+        android:layout_width="274dp"
+        android:layout_height="61dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="69dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="265dp"
+        android:background="@color/black2"
+        android:padding="8dp"
+        android:text="@string/log_in"
+        android:textColor="@android:color/white"
+        android:textSize="25sp"
+        />
+
+    <Button
+        android:id="@+id/SignupButton"
+        android:layout_width="277dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="68dp"
+        android:layout_marginEnd="66dp"
+        android:layout_marginBottom="95dp"
+        android:background="@drawable/button_gradient"
+        android:padding="8dp"
+        android:text="@string/sign_up"
+        android:textColor="@android:color/white"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/editTextText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_above="@+id/SignupButton"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="96dp"
+        android:layout_marginEnd="105dp"
+        android:layout_marginBottom="16dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="@string/don_t_have_an_account_yet_sign_up_here"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
