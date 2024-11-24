@@ -1,13 +1,25 @@
 package com.example.cscb07_project;
 
 import android.content.Intent;
+import java.util.regex.Pattern;
+import android.util.Log;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LogInActivity extends AppCompatActivity implements LogInView {
 
@@ -15,6 +27,7 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
     private Button loginButton;
     private LogInPresenter presenter;
     private TextView redirectToSignUp;
+    private TextView forgotPasswordText;
 
 
     @Override
@@ -22,10 +35,11 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        emailEditText = findViewById(R.id.ResetPasswordCredentialEmail);
+        emailEditText = findViewById(R.id.CredentialEmail);
         passwordEditText = findViewById(R.id.logInPassword);
-        loginButton = findViewById(R.id.ResetPasswordButton);
+        loginButton = findViewById(R.id.logInButton);
         redirectToSignUp = findViewById(R.id.redirectToSignUp);
+        forgotPasswordText = findViewById(R.id.ForgetPassword);
 
         presenter = new LogInPresenter(this);
 
@@ -43,6 +57,15 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
                 finish();
             }
         });
+
+        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LogInActivity.this, ResetPasswordActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } );
 
     }
 

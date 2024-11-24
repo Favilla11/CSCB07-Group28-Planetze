@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">CSCB07-project</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="action_for_climate">Action For Climate</string>
+    <string name="log_in">Log In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="don_t_have_an_account_sign_up">Don\'t have an account? Sign Up</string>
+    <string name="email_address">Email Address</string>
+    <string name="don_t_have_an_account_yet_sign_up_here">Don\'t have an account yet? Sign Up here!</string>
+    <string name="your_choice_can_save_the_planet">Your Choice Can Save the PLANET</string>
+    <string name="climate">CLIMATE</string>
+    <string name="For">FOR</string>
+    <string name="action">ACTION</string>
+    <string name="create_your_new_account">Create Your New Account</string>
+    <string name="register">Register</string>
+    <string name="full_name">Full Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password">Password</string>
+    <string name="already_have_an_account_log_in">Already have an account? Log in</string>
+    <string name="forget_password">Forget Password?</string>
 </resources>

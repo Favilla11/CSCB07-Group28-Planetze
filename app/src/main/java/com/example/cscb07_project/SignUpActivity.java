@@ -3,7 +3,7 @@ package com.example.cscb07_project;
 //import android.util.Patterns;
 import android.content.Intent;
 import java.util.regex.Pattern;
-
+import android.util.Log;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
