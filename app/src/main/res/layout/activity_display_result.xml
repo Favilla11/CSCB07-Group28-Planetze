@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#F5F5F5"
+    tools:context=".DisplayResultActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Annual Carbon Footprint"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:padding="16dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/totalFootprintText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Footprint:"
+                android:textSize="18sp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/totalValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/transportationFootprintText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Transportation Footprint:"
+                android:textSize="18sp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/transportationValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/foodFootprintText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Food Footprint:"
+                android:textSize="18sp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/foodValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <!-- Energy Footprint -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/housingFootprintText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Housing Footprint:"
+                android:textSize="18sp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/housingValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/consumptionFootprintText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Consumption Footprint:"
+                android:textSize="18sp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/consumptionValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:padding="12dp"
+            android:layout_marginTop="24dp" />
+    </LinearLayout>
+</ScrollView>
