@@ -21,10 +21,14 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private DatabaseReference itemRef;
+    private FirebaseDatabase db;
     private EditText fullName, signUpEmail, signUpPassword, confirmPassword;
     private Button signUpButton;
     private TextView redictLogIn;
@@ -44,7 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
-
+        db = FirebaseDatabase.getInstance("https://cscb07-project-2344b-default-rtdb.firebaseio.com/");
         fullName = findViewById(R.id.CredentialEmail);
         signUpEmail = findViewById(R.id.signUpEmail);
         signUpPassword = findViewById(R.id.logInPassword);
@@ -94,23 +98,39 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                    firebaseUser.sendEmailVerification();
-                    Toast.makeText(SignUpActivity.this, "Account Created Successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if (firebaseUser != null) {
+                        firebaseUser.sendEmailVerification();
+                        saveUserToDB(firebaseUser.getUid(),user, email, pass);
+                        Toast.makeText(SignUpActivity.this, "Account Created Successfully!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
                 }
                 else {
                     try {
                         throw task.getException();
                     } catch (FirebaseAuthUserCollisionException e) {
-                        System.out.println("This Email is already registered.");
+                        Toast.makeText(SignUpActivity.this, "\"This Email is already registered.\"", Toast.LENGTH_SHORT).show();
+
                     } catch (Exception e) {
-                        System.out.println("Registration failed");
+                        Toast.makeText(SignUpActivity.this, "failed", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-         }
+        }
+    }
+    private void saveUserToDB(String Uid, String userName, String email, String pass){
+        itemRef = db.getReference("users");
+        User user = new User(userName, email, pass);
+        itemRef.child(Uid).setValue(user).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d("Database", "User data saved successfully");
+            } else {
+                Log.e("Database", "Failed to save user data", task.getException());
+            }
+        });
     }
 
 

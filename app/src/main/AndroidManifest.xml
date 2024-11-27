@@ -42,10 +42,10 @@
         <activity
             android:name=".ResetPasswordActivity"
             android:exported="false" />
-        <activity
-            android:name=".HomeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_home" />
+<!--        <activity-->
+<!--            android:name=".HomeActivity"-->
+<!--            android:exported="false"-->
+<!--            android:label="@string/title_activity_home" />-->
         <activity
             android:name=".LogInActivity"
             android:exported="true">
