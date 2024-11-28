@@ -60,17 +60,19 @@ public class DisplayResultActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         total = calculateFootprint(storedAnswer, graph).get(0);
-        transportPercent = total / calculateFootprint(storedAnswer, graph).get(1) * 100;
-        foodPercent = total / calculateFootprint(storedAnswer, graph).get(2) * 100;
-        housingPercent = total / calculateFootprint(storedAnswer, graph).get(3) * 100;
-        consumptionPercent = total / calculateFootprint(storedAnswer, graph).get(4) * 100;
+        transportPercent = calculateFootprint(storedAnswer, graph).get(1) / total * 100;
+        foodPercent = calculateFootprint(storedAnswer, graph).get(2) / total * 100;
+        housingPercent = calculateFootprint(storedAnswer, graph).get(3) / total * 100;
+        consumptionPercent = calculateFootprint(storedAnswer, graph).get(4) / total * 100;
+        if (housingPercent <= 0){
+            housingPercent = 0;
+        }
 
-
-        totalFootprint = String.format("%.2f", calculateFootprint(storedAnswer, graph).get(0));
-        transportFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(1),transportPercent);
-        foodFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(2),foodPercent);
-        housingFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(3),housingPercent);
-        consumptionFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(4),consumptionPercent);
+        totalFootprint = String.format("%.2f tons CO₂", calculateFootprint(storedAnswer, graph).get(0));
+        transportFootprint = String.format("%.2f tons CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(1),transportPercent);
+        foodFootprint = String.format("%.2f tons CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(2),foodPercent);
+        housingFootprint = String.format("%.2f tons CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(3),housingPercent);
+        consumptionFootprint = String.format("%.2f tons CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(4),consumptionPercent);
         displayResult();
 //        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 //        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -399,12 +401,12 @@ public class DisplayResultActivity extends AppCompatActivity {
 
         if(storedAnswer.get(17).equals("Yes, primarily (more than 50% of energy use)"))
         {
-            housingFootprint = housingFootprint - 6000;
+            housingFootprint = housingFootprint - 600;
         }
 
         else if(storedAnswer.get(17).equals("Yes, partially (less than 50% of energy use)"))
         {
-            housingFootprint = housingFootprint - 4000;
+            housingFootprint = housingFootprint - 400;
         }
         footprint += housingFootprint;
         double product = 0;
@@ -493,7 +495,9 @@ public class DisplayResultActivity extends AppCompatActivity {
         consumptionValue.setText(consumptionFootprint);
     }
     private void navigateToCompare(){
+        String totalStr = String.valueOf(total);
         Intent intent = new Intent(DisplayResultActivity.this, CompareActivity.class);
+        intent.putExtra("totalFootprint", totalStr);
         startActivity(intent);
         finish();
     }
