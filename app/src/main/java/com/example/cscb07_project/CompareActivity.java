@@ -47,13 +47,13 @@ public class CompareActivity extends AppCompatActivity {
         countryComparisonText.setText(countryComparisonResult);
         globalComparisonText.setText(globalComparisonResult);
 
-        finishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CompareActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+//        finishButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(CompareActivity.this, HomeActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        });
     }
 }
