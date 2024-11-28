@@ -1,3 +1,52 @@
 <resources>
     <string name="app_name">CSCB07-project</string>
+    <string-array name="activity_types">
+        <item>Transport</item>
+        <item>Food Consumption</item>
+        <item>Consumption and Shopping</item>
+    </string-array>
+
+    <string-array name="transportation_types">
+        <item>drive personal vehicle</item>
+        <item>public transport</item>
+        <item>cycling or walking</item>
+        <item>flights</item>
+    </string-array>
+
+    <string-array name="personal_vehicle_types">
+        <item>gasoline car</item>
+        <item>electric car</item>
+    </string-array>
+
+    <string-array name="public_vehicle_types">
+        <item>bus</item>
+        <item>train</item>
+        <item>subway</item>
+    </string-array>
+
+    <string-array name="flight_types">
+        <item>short-haul</item>
+        <item>long-haul</item>
+    </string-array>
+
+    <string-array name="food_consumption_types">
+        <item>beef</item>
+        <item>pork</item>
+        <item>chicken</item>
+        <item>fish</item>
+        <item>plant-based</item>
+    </string-array>
+
+    <string-array name="consumption_and_shopping_types">
+        <item>Buy New Clothes</item>
+        <item>Buy Electronics</item>
+        <item>Other Purchases</item>
+        <item>Energy Bills</item>
+    </string-array>
+
+    <string-array name="energy_bill_types">
+        <item>Electricity</item>
+        <item>Gas</item>
+        <item>Water</item>
+    </string-array>
 </resources>
