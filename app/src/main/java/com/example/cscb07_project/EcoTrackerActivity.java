@@ -15,7 +15,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
 
     // UI components
     private EditText editDistanceDriven, editTimePublicTransport, editDistanceCycledWalked, editFlights, editNumberOfServingsConsumed, editNumberOfClothingItemsPurchased, editNumberOfDevicesPurchased, editNumberOtherPurchases, editEnergyBill;
-    private Spinner spinnerTransportationType, spinnerFoodConsumptionType, spinnerConsumptionAndShoppingType, spinnerPersonalVehicleType, spinnerPublicVehicleType, spinnerFlightType, spinnerActivityType;
+    private Spinner spinnerTransportationType, spinnerFoodConsumptionType, spinnerConsumptionAndShoppingType, spinnerPersonalVehicleType, spinnerPublicVehicleType, spinnerFlightType, spinnerActivityType, spinnerEnergyBillType;
     private Button btnCalculateEmissions, btnClearAll;
     private TextView txtTotalEmissions;
     private TextView txtPartEmissions;
@@ -39,6 +39,9 @@ public class EcoTrackerActivity extends AppCompatActivity {
     private double emissionsBuyElectronics = 0.0;
     private double emissionsOtherPurchases = 0.0;
     private double emissionsEnergyBills = 0.0;
+    private double emissionsElectricityBills = 0.0;
+    private double emissionsGasBills = 0.0;
+    private double emissionsWaterBills = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
         spinnerPublicVehicleType = findViewById(R.id.spinner_public_vehicle_type); // For selecting vehicle type
         spinnerFlightType = findViewById(R.id.spinner_flight_type); // For selecting flight type
         spinnerActivityType = findViewById(R.id.spinner_activity_type); // New Spinner for Transport or Food
+        spinnerEnergyBillType = findViewById(R.id.spinner_energy_bill_type);
         btnCalculateEmissions = findViewById(R.id.btn_calculate_emissions);
         btnClearAll = findViewById(R.id.btn_clear_all);
         txtTotalEmissions = findViewById(R.id.txt_total_emissions);
@@ -152,6 +156,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
         spinnerConsumptionAndShoppingType.setVisibility(View.GONE);
         spinnerPersonalVehicleType.setVisibility(View.GONE);
         spinnerPublicVehicleType.setVisibility(View.GONE);
+        spinnerEnergyBillType.setVisibility(View.GONE);
         spinnerFlightType.setVisibility(View.GONE);
         spinnerActivityType.setVisibility(View.VISIBLE);
         editDistanceDriven.setVisibility(View.GONE);
@@ -189,6 +194,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
         spinnerConsumptionAndShoppingType.setVisibility(View.GONE);
         spinnerPersonalVehicleType.setVisibility(View.GONE);
         spinnerPublicVehicleType.setVisibility(View.GONE);
+        spinnerEnergyBillType.setVisibility(View.GONE);
         spinnerFlightType.setVisibility(View.GONE);
         spinnerActivityType.setVisibility(View.VISIBLE);
         editDistanceDriven.setVisibility(View.GONE);
@@ -220,6 +226,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
         spinnerPublicVehicleType.setVisibility(View.GONE);
         spinnerFlightType.setVisibility(View.GONE);
         spinnerFoodConsumptionType.setVisibility(View.VISIBLE);
+        spinnerEnergyBillType.setVisibility(View.GONE);
         editDistanceDriven.setVisibility(View.GONE);
         editTimePublicTransport.setVisibility(View.GONE);
         editDistanceCycledWalked.setVisibility(View.GONE);
@@ -238,6 +245,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
             spinnerPersonalVehicleType.setVisibility(View.GONE);
             editTimePublicTransport.setVisibility(View.GONE);
             spinnerPublicVehicleType.setVisibility(View.GONE);
+            spinnerEnergyBillType.setVisibility(View.GONE);
             editDistanceCycledWalked.setVisibility(View.GONE);
             editFlights.setVisibility(View.GONE);
             spinnerFlightType.setVisibility(View.GONE);
@@ -250,6 +258,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
             spinnerPersonalVehicleType.setVisibility(View.GONE);
             editTimePublicTransport.setVisibility(View.GONE);
             spinnerPublicVehicleType.setVisibility(View.GONE);
+            spinnerEnergyBillType.setVisibility(View.GONE);
             editDistanceCycledWalked.setVisibility(View.GONE);
             editFlights.setVisibility(View.GONE);
             spinnerFlightType.setVisibility(View.GONE);
@@ -262,6 +271,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
             spinnerPersonalVehicleType.setVisibility(View.GONE);
             editTimePublicTransport.setVisibility(View.GONE);
             spinnerPublicVehicleType.setVisibility(View.GONE);
+            spinnerEnergyBillType.setVisibility(View.GONE);
             editDistanceCycledWalked.setVisibility(View.GONE);
             editFlights.setVisibility(View.GONE);
             spinnerFlightType.setVisibility(View.GONE);
@@ -281,6 +291,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
             editNumberOfDevicesPurchased.setVisibility(View.GONE);
             editNumberOtherPurchases.setVisibility(View.GONE);
             editEnergyBill.setVisibility(View.VISIBLE);
+            spinnerEnergyBillType.setVisibility(View.VISIBLE);
         }
     }
     private void calculateEmissions() {
@@ -342,7 +353,7 @@ public class EcoTrackerActivity extends AppCompatActivity {
                         emissionsOtherPurchases = logOtherPurchases();
                         break;
                     case "Energy Bills":
-                        emissionsEnergyBills= logEnergyBills();
+                        emissionsEnergyBills = logEnergyBills();
                         break;
                     default:
                         Toast.makeText(this, "Unknown transport type", Toast.LENGTH_SHORT).show();
@@ -528,13 +539,46 @@ public class EcoTrackerActivity extends AppCompatActivity {
     }
 
     private double logEnergyBills() {
+        String BillType = spinnerEnergyBillType.getSelectedItem().toString();
+        if (BillType.equals("Electricity")){
+            emissionsElectricityBills = logElectricityBills();
+        } else if (BillType.equals("Gas")){
+            emissionsWaterBills = logWaterBills();
+        } else if (BillType.equals("Water")){
+            emissionsGasBills = logGasBills();
+        }
+
+        return emissionsElectricityBills + emissionsWaterBills + emissionsGasBills;
+    }
+
+    private double logElectricityBills() {
         String number = editEnergyBill.getText().toString();
         if (number.isEmpty()) {
-            Toast.makeText(this, "Please enter energy bill", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter electricity bill", Toast.LENGTH_SHORT).show();
             return 0;
         }
         double numberconsumed = Double.parseDouble(number);
-        return numberconsumed * 1; // CO2 per hour for public transport
+        return numberconsumed * 0.5; // CO2 per hour for public transport
+    }
+
+    private double logWaterBills() {
+        String number = editEnergyBill.getText().toString();
+        if (number.isEmpty()) {
+            Toast.makeText(this, "Please enter water bill", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        double numberconsumed = Double.parseDouble(number);
+        return numberconsumed * 0.5; // CO2 per hour for public transport
+    }
+
+    private double logGasBills() {
+        String number = editEnergyBill.getText().toString();
+        if (number.isEmpty()) {
+            Toast.makeText(this, "Please enter gas bill", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        double numberconsumed = Double.parseDouble(number);
+        return numberconsumed * 0.5; // CO2 per hour for public transport
     }
     private void clearAllData() {
         editDistanceDriven.setText("");
@@ -558,5 +602,6 @@ public class EcoTrackerActivity extends AppCompatActivity {
         spinnerPersonalVehicleType.setSelection(0);
         spinnerPublicVehicleType.setSelection(0);
         spinnerFlightType.setSelection(0);
+        spinnerEnergyBillType.setSelection(0);
     }
 }
