@@ -22,12 +22,12 @@ import java.util.Map;
 public class CalendarActivity extends AppCompatActivity {
 
     private CalendarView calendarView;
-    private Button addEventButton;
-    private RecyclerView eventsRecyclerView;
+    private Button addActivityButton;
+    private RecyclerView activitiesRecyclerView;
 
-    private Map<String, List<Event>> eventsMap;
-    private List<Event> currentDateEvents;
-    private EventAdapter eventAdapter;
+    private Map<String, List<Activity>> activitiesMap;
+    private List<Activity> currentDateActivities;
+    private ActivityAdapter activityAdapter;
     private String selectedDate;
 
     @Override
@@ -36,25 +36,25 @@ public class CalendarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         calendarView = findViewById(R.id.calendarView);
-        addEventButton = findViewById(R.id.addEventButton);
-        eventsRecyclerView = findViewById(R.id.eventsRecyclerView);
+        addActivityButton = findViewById(R.id.addActivityButton);
+        activitiesRecyclerView = findViewById(R.id.activitiesRecyclerView);
 
-        eventsMap = new HashMap<>();
-        currentDateEvents = new ArrayList<>();
-        eventAdapter = new EventAdapter(currentDateEvents, new EventAdapter.OnEventClickListener() {
+        activitiesMap = new HashMap<>();
+        currentDateActivities = new ArrayList<>();
+        activityAdapter = new ActivityAdapter(currentDateActivities, new ActivityAdapter.OnActivityClickListener() {
             @Override
-            public void onEditClick(Event event, int position) {
-                showEditEventDialog(event, position);
+            public void onEditClick(Activity activity, int position) {
+                showEditActivityDialog(activity, position);
             }
 
             @Override
-            public void onDeleteClick(Event event, int position) {
-                deleteEvent(event, position);
+            public void onDeleteClick(Activity activity, int position) {
+                deleteActivity(activity, position);
             }
         });
 
-        eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        eventsRecyclerView.setAdapter(eventAdapter);
+        activitiesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        activitiesRecyclerView.setAdapter(activityAdapter);
 
         selectedDate = getFormattedDate(calendarView.getDate());
         updateRecyclerView();
@@ -64,48 +64,49 @@ public class CalendarActivity extends AppCompatActivity {
             updateRecyclerView();
         });
 
-        addEventButton.setOnClickListener(v -> showAddEventDialog());
+        addActivityButton.setOnClickListener(v -> showAddActivityDialog());
     }
 
-    private void showAddEventDialog() {
+    private void showAddActivityDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add Event");
+        builder.setTitle("Add Activity");
 
         final EditText input = new EditText(this);
-        input.setHint("Event Description");
+        input.setHint("Activity Description");
         builder.setView(input);
 
         builder.setPositiveButton("Add", (dialog, which) -> {
             String description = input.getText().toString().trim();
             if (!description.isEmpty()) {
-                if (!eventsMap.containsKey(selectedDate)) {
-                    eventsMap.put(selectedDate, new ArrayList<>());
+                if (!activitiesMap.containsKey(selectedDate)) {
+                    activitiesMap.put(selectedDate, new ArrayList<>());
                 }
-                eventsMap.get(selectedDate).add(new Event(selectedDate, description));
+                activitiesMap.get(selectedDate).add(new Activity(selectedDate, description));
                 updateRecyclerView();
-                Toast.makeText(this, "Event Added!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Activity Added!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Event description cannot be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Activity description cannot be empty", Toast.LENGTH_SHORT).show();
             }
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
     }
-    private void showEditEventDialog(Event event, int position) {
+
+    private void showEditActivityDialog(Activity activity, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Edit Event");
+        builder.setTitle("Edit Activity");
 
         final EditText input = new EditText(this);
-        input.setText(event.getDescription());
+        input.setText(activity.getDescription());
         builder.setView(input);
 
         builder.setPositiveButton("Update", (dialog, which) -> {
             String newDescription = input.getText().toString().trim();
             if (!newDescription.isEmpty()) {
-                event.setDescription(newDescription);
-                eventAdapter.notifyItemChanged(position);
-                Toast.makeText(this, "Event Updated!", Toast.LENGTH_SHORT).show();
+                activity.setDescription(newDescription);
+                activityAdapter.notifyItemChanged(position);
+                Toast.makeText(this, "Activity Updated!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Description cannot be empty", Toast.LENGTH_SHORT).show();
             }
@@ -116,23 +117,24 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void updateRecyclerView() {
-        currentDateEvents.clear();
-        if (eventsMap.containsKey(selectedDate)) {
-            currentDateEvents.addAll(eventsMap.get(selectedDate));
+        currentDateActivities.clear();
+        if (activitiesMap.containsKey(selectedDate)) {
+            currentDateActivities.addAll(activitiesMap.get(selectedDate));
         }
-        eventAdapter.notifyDataSetChanged();
+        activityAdapter.notifyDataSetChanged();
     }
-    private void deleteEvent(Event event, int position) {
-        currentDateEvents.remove(position);
-        if (eventsMap.containsKey(selectedDate)) {
-            eventsMap.get(selectedDate).remove(event);
 
-            if (eventsMap.get(selectedDate).isEmpty()) {
-                eventsMap.remove(selectedDate);
+    private void deleteActivity(Activity activity, int position) {
+        currentDateActivities.remove(position);
+        if (activitiesMap.containsKey(selectedDate)) {
+            activitiesMap.get(selectedDate).remove(activity);
+
+            if (activitiesMap.get(selectedDate).isEmpty()) {
+                activitiesMap.remove(selectedDate);
             }
         }
-        eventAdapter.notifyItemRemoved(position);
-        Toast.makeText(this, "Event Deleted!", Toast.LENGTH_SHORT).show();
+        activityAdapter.notifyItemRemoved(position);
+        Toast.makeText(this, "Activity Deleted!", Toast.LENGTH_SHORT).show();
     }
 
     private String getFormattedDate(long timeInMillis) {
