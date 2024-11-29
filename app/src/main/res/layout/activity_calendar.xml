@@ -4,35 +4,94 @@
     android:layout_height="match_parent"
     android:id="@+id/main"
     android:orientation="vertical">
-    <Spinner
-        android:id="@+id/first_spinner"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:spinnerMode="dropdown"/>
-    <!-- Second Spinner -->
-    <Spinner
-        android:id="@+id/second_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone"
-        android:spinnerMode="dropdown"/>
-    <!-- EditText -->
-    <EditText
-        android:id="@+id/input_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:inputType="text"
-        android:layout_marginBottom="16dp"/>
+        android:orientation="vertical">
+
+        <!-- First Spinner: Category Selection -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please selcet your Activity"
+            android:layout_marginBottom="8dp"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:spinnerMode="dropdown" />
+
+        <!-- Second Spinner: Subcategory Selection -->
+        <TextView
+            android:id="@+id/subcategory_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Subcategory"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/subcategory_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            android:spinnerMode="dropdown" />
+
+        <!-- Third Spinner (for nested options, e.g., type of public transport) -->
+        <TextView
+            android:id="@+id/nested_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Option"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/nested_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            android:spinnerMode="dropdown" />
+
+        <!-- Dynamic Input Section -->
+        <LinearLayout
+            android:id="@+id/input_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/input_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Input Details"
+                android:layout_marginBottom="8dp"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/input_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter value"
+                android:inputType="text"
+                android:layout_marginBottom="16dp" />
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/addActivityButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Add Event" />
+        android:text="Add" />
 
     <CalendarView
         android:id="@+id/calendarView"
