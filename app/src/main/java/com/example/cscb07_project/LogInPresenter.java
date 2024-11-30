@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LogInPresenter {
 
     private LogInView view;
-    private LogInModel model;
+    LogInModel model;
 
     public LogInPresenter(LogInView view) {
         this.view = view;
