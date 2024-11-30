@@ -56,6 +56,7 @@ dependencies {
     implementation ("com.github.blackfizz:eazegraph:1.2.2@aar")
     implementation ("com.nineoldandroids:library:2.4.0")
 
-    implementation("org.mockito:mockito-core:5.14.2")
+
+    testImplementation("org.mockito:mockito-core:5.14.2")
 
 }

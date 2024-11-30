@@ -27,7 +27,7 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
         loginButton = findViewById(R.id.ResetPasswordButton);
         redirectToSignUp = findViewById(R.id.redirectToSignUp);
 
-        presenter = new LogInPresenter(this);
+        presenter = new LogInPresenter(this, new LogInModel()); //
 
         loginButton.setOnClickListener(v -> {
             String email = emailEditText.getText().toString().trim();
@@ -44,16 +44,6 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
             }
         });
 
-    }
-
-    @Override
-    public void showProgress() {
-        // Show a progress bar or loading indicator
-    }
-
-    @Override
-    public void hideProgress() {
-        // Hide the progress bar or loading indicator
     }
 
     @Override

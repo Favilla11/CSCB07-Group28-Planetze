@@ -25,9 +25,9 @@ public class LogInPresenter {
     private LogInView view;
     LogInModel model;
 
-    public LogInPresenter(LogInView view) {
+    public LogInPresenter(LogInView view, LogInModel model) {
         this.view = view;
-        this.model = new LogInModel();
+        this.model = model;
     }
 
     public void validateCredentials(String email, String password) {
@@ -40,17 +40,15 @@ public class LogInPresenter {
             return;
         }
 
-        view.showProgress();
+
         model.login(email, password, new LogInModel.OnLoginFinishedListener() {
             @Override
             public void onSuccess() {
-                view.hideProgress();
                 view.navigateToHome();
             }
 
             @Override
             public void onError(String error) {
-                view.hideProgress();
                 view.setEmailError(error); // or show a general error
             }
         });

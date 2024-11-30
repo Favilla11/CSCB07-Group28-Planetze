@@ -1,21 +1,15 @@
 
 package com.example.cscb07_project;
 
-import org.junit.Before;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-
-import android.text.Editable;
-import android.widget.EditText;
 
 @RunWith(MockitoJUnitRunner.class)
 
@@ -26,43 +20,62 @@ import android.widget.EditText;
  */
 public class ExampleUnitTest {
     @Mock
-    private LogInView view;
+    LogInActivity activity;
 
     @Mock
-    private LogInModel model;
+    LogInModel model;
 
-    private LogInPresenter presenter;
+    @Mock
+    LogInPresenter presenter;
 
-    @Before
+    /*@Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         presenter = new LogInPresenter(view);
         presenter.model = model; // assuming model is package-private
+    }*/
+
+
+    @Test
+    public void checkEmptyCredential(){
+        LogInPresenter logInPresenter=new LogInPresenter(activity, model);
+        logInPresenter.validateCredentials("","TestPass1234");
+        verify(activity).setEmailError("Email cannot be empty");
     }
 
     @Test
-    public void validateCredentials_withEmptyEmail() {
-        presenter.validateCredentials("", "password");
-        verify(view).setEmailError("Email cannot be empty");
-        verifyNoMoreInteractions(view, model);
+    public void checkEmptyPassword(){
+        LogInPresenter logInPresenter=new LogInPresenter(activity,model);
+        logInPresenter.validateCredentials("@example.com","");
+        verify(activity).setPasswordError("Password cannot be empty");
     }
 
     @Test
-    public void validateCredentials_withEmptyPassword() {
-        presenter.validateCredentials("email", "");
+    public void checkLoginSuccess(){
+        LogInPresenter logInPresenter=new LogInPresenter(activity,model);
+        String email = "test@example.com";
+        String password = "BeagleTest_001";
+        logInPresenter.validateCredentials(email,password);
+        ArgumentCaptor<LogInModel.OnLoginFinishedListener> captor =
+                ArgumentCaptor.forClass(LogInModel.OnLoginFinishedListener.class);
+        verify(model).login(eq(email), eq(password), captor.capture());
+        captor.getValue().onSuccess();
 
-        verify(view).setPasswordError("Password cannot be empty");
-        verifyNoMoreInteractions(view, model);
+        verify(activity).navigateToHome();
     }
 
     @Test
-    public void validateCredentials_withValidCredentials_shouldCallModelLogin() {
-        String email = "email";
-        String password = "password";
-
-        presenter.validateCredentials(email, password);
-
-        verify(view).showProgress();
-        verify(model).login(eq(email), eq(password), any(LogInModel.OnLoginFinishedListener.class));
+    public void checkLoginError(){
+        LogInPresenter logInPresenter=new LogInPresenter(activity,model);
+        String email = "test@example.com";
+        String password = "BeagleTest_001";
+        String errorMessage="Invalid credential";
+        logInPresenter.validateCredentials(email,password);
+        ArgumentCaptor<LogInModel.OnLoginFinishedListener> captor =
+                ArgumentCaptor.forClass(LogInModel.OnLoginFinishedListener.class);
+        verify(model).login(eq(email), eq(password), captor.capture());
+        captor.getValue().onError(errorMessage);
+        verify(activity).setEmailError(errorMessage);
     }
+
 }
