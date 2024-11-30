@@ -12,10 +12,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +43,9 @@ public class CalendarActivity extends AppCompatActivity {
     private List<Activity> currentDateActivities;
     private ActivityAdapter activityAdapter;
     private String selectedDate;
+    private DatabaseReference databaseReference;
+    private FirebaseAuth auth;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,21 +66,64 @@ public class CalendarActivity extends AppCompatActivity {
         TextView inputLabel = findViewById(R.id.input_label);
         EditText inputField = findViewById(R.id.input_field);
 
-        // Define categories, subcategories, and nested options
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        auth = FirebaseAuth.getInstance();
+        currentUser = auth.getCurrentUser();
+        List<Habit> habitList = new ArrayList<>();
+
+        String userId = currentUser.getUid();
+
+        databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Retrieve User data
+                    User user = dataSnapshot.getValue(User.class);
+
+                    for (DataSnapshot habitSnapshot : dataSnapshot.child("habitlist").getChildren()) {
+                        Habit habit = habitSnapshot.getValue(Habit.class);
+                        habitList.add(habit);
+                    }
+
+                    user.habitlist = habitList;
+
+                    Log.d("Firebase", "User: " + user.username);
+                    for (Habit habit : user.habitlist) {
+                        Log.d("Firebase", "Habit: " + habit.habitType + ", Emission: " + habit.emission);
+                    }
+                } else {
+                    Log.d("Firebase", "User does not exist.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Firebase", "Error: " + databaseError.getMessage());
+            }
+        });
+
+//        habitLogReminder();
+        List<String> categories = new ArrayList<>();
+        categories.add("------Select Category------");
+        categories.add("Transportation");
+        categories.add("Food");
+        categories.add("Consumption");
+
         HashMap<String, String[]> subcategories = new HashMap<>();
         subcategories.put("Transportation", new String[]{"Drive Personal Vehicle", "Public Transportation", "Cycling or Walking", "Flight"});
-        subcategories.put("Food", new String[]{"Meal"});
+        subcategories.put("Food", new String[]{"Beef", "Pork", "Chicken", "Fish", "Plant-Based"});
         subcategories.put("Consumption", new String[]{"Buy New Clothes", "Buy Electronics", "Other Purchases", "Energy Bills"});
+        subcategories.put("------Select Category------", new String[]{});
 
         HashMap<String, String[]> nestedOptions = new HashMap<>();
         nestedOptions.put("Public Transportation", new String[]{"Bus", "Train", "Subway"});
         nestedOptions.put("Flight", new String[]{"Short-Haul (<1,500 km)", "Long-Haul (>1,500 km)"});
-        nestedOptions.put("Meal", new String[]{"Beef", "Pork", "Chicken", "Fish", "Plant-Based"});
 
         // Populate first spinner
-        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subcategories.keySet().toArray(new String[0]));
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
+        categorySpinner.setSelection(0);
 
         // Handle category selection
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -128,7 +182,11 @@ public class CalendarActivity extends AppCompatActivity {
                     case "Flight":
                         inputField.setHint("Enter number of flights today");
                         break;
-                    case "Meal":
+                    case "Beef":
+                    case "Pork":
+                    case "Chicken":
+                    case "Fish":
+                    case "Plant-Base":
                         inputField.setHint("Enter number of servings");
                         break;
                     case "Buy New Clothes":
@@ -152,8 +210,6 @@ public class CalendarActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-
-        // Handle nested spinner selection (optional additional logic can go here)
 
         activitiesMap = new HashMap<>();
         currentDateActivities = new ArrayList<>();
@@ -186,27 +242,60 @@ public class CalendarActivity extends AppCompatActivity {
             String subcategory = (String) subcategorySpinner.getSelectedItem();
             String nestedOption = nestedSpinner.getVisibility() == View.VISIBLE ? (String) nestedSpinner.getSelectedItem() : null;
             String userInput = inputField.getText().toString().trim();
+            String hint = "";
+            String detail = "";
 
-            // Validate input
+            switch (subcategory){
+                case "Drive Personal Vehicle":
+                case "Cycling or Walking":
+                    hint = "Distance:";
+                    break;
+                case "Beef":
+                case "Pork":
+                case "Chicken":
+                case "Fish":
+                case "Plant-Base":
+                    hint = "Number Consume:";
+                    break;
+                case "Buy New Clothes":
+                case "Buy Electronics":
+                case "Other Purchases":
+                    hint = "Number Purchase";
+                    break;
+                case "Public Transportation":
+                case "Flight":
+                    hint = "Duration:";
+                    detail = "Type:";
+                    break;
+
+                case "Energy Bills":
+                    hint = "Amount";
+                    break;
+            }
+
             if (category == null || subcategory == null || userInput.isEmpty()) {
                 Toast.makeText(this, "Please complete all fields before adding the activity.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Build activity description
             StringBuilder activityDescription = new StringBuilder();
             activityDescription.append(subcategory).append("\n");
             if (nestedOption != null) {
-                activityDescription.append("Detail: ").append(nestedOption).append("\n");
+                activityDescription.append(detail).append(nestedOption).append("\n");
             }
-            activityDescription.append("Input: ").append(userInput);
+            activityDescription.append(hint).append(userInput);
 
             // Create new activity
             if (!activitiesMap.containsKey(selectedDate)) {
                 activitiesMap.put(selectedDate, new ArrayList<>());
             }
-            activitiesMap.get(selectedDate).add(new Activity(selectedDate, activityDescription.toString()));
+            activitiesMap.get(selectedDate).add(new Activity(selectedDate, activityDescription.toString(), subcategory));
 
+            for (Habit habit : habitList){
+                if (habit.getCategory().equal(subcategory)){
+                    habit.addProgress();
+                }
+            }
             // Update RecyclerView
             updateRecyclerView();
 
@@ -221,31 +310,6 @@ public class CalendarActivity extends AppCompatActivity {
 
     }
 
-    private void showAddActivityDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add Activity");
-
-        final EditText input = new EditText(this);
-        input.setHint("Activity Description");
-        builder.setView(input);
-
-        builder.setPositiveButton("Add", (dialog, which) -> {
-            String description = input.getText().toString().trim();
-            if (!description.isEmpty()) {
-                if (!activitiesMap.containsKey(selectedDate)) {
-                    activitiesMap.put(selectedDate, new ArrayList<>());
-                }
-                activitiesMap.get(selectedDate).add(new Activity(selectedDate, description));
-                updateRecyclerView();
-                Toast.makeText(this, "Activity Added!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Activity description cannot be empty", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.show();
-    }
 
     private void showEditActivityDialog(Activity activity, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -295,6 +359,27 @@ public class CalendarActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         return sdf.format(new Date(timeInMillis));
     }
+//    private void habitLogReminder(){
+//        List<Acitvity> activityList; //get activity from firebase
+//        //may be original gethabit is list<string>, need to be updated
+//        ArrayList<Habit> habitlist = getHabits2();
+//        boolean if_logged = false;
+//        for (Acitvity activity : activityList) {
+//            for(Habit habit : habitlist){
+//                if(activity.getCategory == habit.getCategroy){
+//                    if_logged = true;
+//                    break;
+//                }
+//            }
+//        }
+//        if (!if_logged){
+//            new AlertDialog.Builder(this).setTitle("Habits are waiting to be logged!")
+//                    .setPositiveButton("Got it", (dialog, which) -> {
+//                        dialog.dismiss();
+//                    })
+//                    .show();
+//        }
+//    }
 }
 
 
