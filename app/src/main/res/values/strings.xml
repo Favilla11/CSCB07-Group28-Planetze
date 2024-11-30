@@ -21,4 +21,14 @@
     <string name="password">Password</string>
     <string name="already_have_an_account_log_in">Already have an account? Log in</string>
     <string name="forget_password">Forget Password?</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="email_address1">Email Address</string>
+    <string name="reset">Reset</string>
+    <string name="enter_the_email_associated_with_your_account_we_will_send_out_an_email_with_instructions_to_reset_your_password">Enter the email associated with your account.We will send out an email with instructions to reset your password.</string>
+    <string name="search_suggestions_here">Search Suggestions Here:</string>
 </resources>

@@ -4,12 +4,14 @@ import java.util.regex.Pattern;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.util.Log;
@@ -44,9 +46,21 @@ public class ResetPasswordActivity extends AppCompatActivity{
             }
         });
 
+        ImageButton backButton = findViewById(R.id.resetBackButton);
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //replace with EcoTrackerMain
+                Intent intent = new Intent(ResetPasswordActivity.this, LogInActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         RelativeLayout layout = findViewById(R.id.main);
         ColorDrawable background = new ColorDrawable(Color.parseColor("green"));
         layout.setBackground(background);
+        backButton.setBackground(background);
         ObjectAnimator gradiant = ObjectAnimator.ofObject( background, "color", new ArgbEvaluator(),
                 Color.parseColor("#3F51B5"), Color.parseColor("#009999"));
         gradiant.setDuration(3000);

@@ -67,6 +67,17 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
             }
         } );
 
+        //to be deleted: HabbitSuggestion intent
+        TextView Login_to_your_account_Text = findViewById(R.id.Logintext2);
+        Login_to_your_account_Text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LogInActivity.this, HabbitSuggestion.class);
+                startActivity(intent);
+                finish();
+            }
+        } );
+
     }
 
     @Override
