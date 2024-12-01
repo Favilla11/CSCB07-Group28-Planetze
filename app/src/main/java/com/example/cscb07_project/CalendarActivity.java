@@ -1,6 +1,7 @@
 package com.example.cscb07_project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,14 +14,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -38,14 +43,18 @@ public class CalendarActivity extends AppCompatActivity {
     private CalendarView calendarView;
     private Button addActivityButton;
     private RecyclerView activitiesRecyclerView;
+    private TextView emissionTextView;
 
     private Map<String, List<Activity>> activitiesMap;
+    private Map<String, Information> userInformation;
     private List<Activity> currentDateActivities;
     private ActivityAdapter activityAdapter;
     private String selectedDate;
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
     private FirebaseUser currentUser;
+
+    public double dailyEmission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +70,17 @@ public class CalendarActivity extends AppCompatActivity {
 
         TextView subcategoryLabel = findViewById(R.id.subcategory_label);
         TextView nestedLabel = findViewById(R.id.nested_label);
+        emissionTextView = findViewById(R.id.dailyEmissionView);
 
         LinearLayout inputSection = findViewById(R.id.input_section);
         TextView inputLabel = findViewById(R.id.input_label);
         EditText inputField = findViewById(R.id.input_field);
+        userInformation = new HashMap<>();
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
+
         List<Habit> habitList = new ArrayList<>();
 
         String userId = currentUser.getUid();
@@ -80,17 +92,13 @@ public class CalendarActivity extends AppCompatActivity {
                     // Retrieve User data
                     User user = dataSnapshot.getValue(User.class);
 
-                    for (DataSnapshot habitSnapshot : dataSnapshot.child("habitlist").getChildren()) {
+                    for (DataSnapshot habitSnapshot : dataSnapshot.child("habitList").getChildren()) {
                         Habit habit = habitSnapshot.getValue(Habit.class);
                         habitList.add(habit);
                     }
 
-                    user.habitlist = habitList;
+                    user.setHabitList(habitList);
 
-                    Log.d("Firebase", "User: " + user.username);
-                    for (Habit habit : user.habitlist) {
-                        Log.d("Firebase", "Habit: " + habit.habitType + ", Emission: " + habit.emission);
-                    }
                 } else {
                     Log.d("Firebase", "User does not exist.");
                 }
@@ -102,7 +110,7 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-//        habitLogReminder();
+        dailyEmission = 0;
         List<String> categories = new ArrayList<>();
         categories.add("------Select Category------");
         categories.add("Transportation");
@@ -118,14 +126,13 @@ public class CalendarActivity extends AppCompatActivity {
         HashMap<String, String[]> nestedOptions = new HashMap<>();
         nestedOptions.put("Public Transportation", new String[]{"Bus", "Train", "Subway"});
         nestedOptions.put("Flight", new String[]{"Short-Haul (<1,500 km)", "Long-Haul (>1,500 km)"});
+        nestedOptions.put("Energy Bills", new String[]{"Water", "Gas", "Electricity"});
 
-        // Populate first spinner
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
         categorySpinner.setSelection(0);
 
-        // Handle category selection
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -146,14 +153,13 @@ public class CalendarActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        // Handle subcategory selection
         subcategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedSubcategory = (String) parent.getItemAtPosition(position);
 
+
                 if (nestedOptions.containsKey(selectedSubcategory)) {
-                    // Populate third spinner if nested options exist
                     ArrayAdapter<String> nestedAdapter = new ArrayAdapter<>(CalendarActivity.this, android.R.layout.simple_spinner_item, nestedOptions.get(selectedSubcategory));
                     nestedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     nestedSpinner.setAdapter(nestedAdapter);
@@ -168,7 +174,6 @@ public class CalendarActivity extends AppCompatActivity {
                 inputSection.setVisibility(View.VISIBLE);
                 inputLabel.setText("Enter details for: " + selectedSubcategory);
 
-                // Dynamically set EditText hint based on subcategory
                 switch (selectedSubcategory) {
                     case "Drive Personal Vehicle":
                         inputField.setHint("Enter distance driven (km or miles)");
@@ -234,16 +239,26 @@ public class CalendarActivity extends AppCompatActivity {
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
             updateRecyclerView();
+            Log.d("date", selectedDate);
+            dailyEmission = calculateDailyEmission(selectedDate);
+            emissionTextView.setText("Total Emission: " + dailyEmission + "kg CO₂");
+            Log.d("fd", dailyEmission + "");
         });
 
         addActivityButton.setOnClickListener(v -> {
             // Retrieve selected values
             String category = (String) categorySpinner.getSelectedItem();
+            if (category.equals("------Select Category------")){
+                Toast.makeText(this, "Please complete all fields before adding the activity.", Toast.LENGTH_SHORT).show();
+                return;
+            }
             String subcategory = (String) subcategorySpinner.getSelectedItem();
             String nestedOption = nestedSpinner.getVisibility() == View.VISIBLE ? (String) nestedSpinner.getSelectedItem() : null;
             String userInput = inputField.getText().toString().trim();
             String hint = "";
             String detail = "";
+
+
 
             switch (subcategory){
                 case "Drive Personal Vehicle":
@@ -260,7 +275,7 @@ public class CalendarActivity extends AppCompatActivity {
                 case "Buy New Clothes":
                 case "Buy Electronics":
                 case "Other Purchases":
-                    hint = "Number Purchase";
+                    hint = "Number Purchase:";
                     break;
                 case "Public Transportation":
                 case "Flight":
@@ -270,13 +285,21 @@ public class CalendarActivity extends AppCompatActivity {
 
                 case "Energy Bills":
                     hint = "Amount";
+                    detail = "Type";
                     break;
             }
 
-            if (category == null || subcategory == null || userInput.isEmpty()) {
+            if (userInput.isEmpty()) {
                 Toast.makeText(this, "Please complete all fields before adding the activity.", Toast.LENGTH_SHORT).show();
                 return;
             }
+            double number = parseToNumber(userInput);
+            if (number == 0.0){
+                Toast.makeText(this, "Invalid input", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            double emission = calculateEmission(category, subcategory, nestedOption, userInput);
+            Log.d("DailyEmission", "Emission: " + emission);
 
             StringBuilder activityDescription = new StringBuilder();
             activityDescription.append(subcategory).append("\n");
@@ -289,24 +312,26 @@ public class CalendarActivity extends AppCompatActivity {
             if (!activitiesMap.containsKey(selectedDate)) {
                 activitiesMap.put(selectedDate, new ArrayList<>());
             }
-            activitiesMap.get(selectedDate).add(new Activity(selectedDate, activityDescription.toString(), subcategory));
+            activitiesMap.get(selectedDate).add(new Activity(selectedDate, activityDescription.toString(),category, subcategory, emission));
 
             for (Habit habit : habitList){
                 if (habit.getCategory().equal(subcategory)){
-                    habit.addProgress();
+                    habit.upDateProgress(1);
                 }
             }
-            // Update RecyclerView
             updateRecyclerView();
 
-            // Clear input fields
             inputField.setText("");
-            nestedSpinner.setSelection(0);
-            subcategorySpinner.setSelection(0);
-            categorySpinner.setSelection(0);
+
+            dailyEmission = calculateDailyEmission(selectedDate);
+            userInformation.put(selectedDate, new Information(currentDateActivities, dailyEmission));
+            saveData(userInformation);
+
+            emissionTextView.setText("Total Emission: " + dailyEmission + "kg CO₂");
 
             Toast.makeText(this, "Activity Added!", Toast.LENGTH_SHORT).show();
         });
+
 
     }
 
@@ -322,8 +347,23 @@ public class CalendarActivity extends AppCompatActivity {
         builder.setPositiveButton("Update", (dialog, which) -> {
             String newDescription = input.getText().toString().trim();
             if (!newDescription.isEmpty()) {
+                double oldEmissions = activity.getEmission();
                 activity.setDescription(newDescription);
+                double newEmission = calculateEmission(activity.getCategory(), activity.getSubCategory(), null, activity.getDescription());
+                activity.setEmission(newEmission);
+                dailyEmission -= oldEmissions;
+                dailyEmission += newEmission;
+
                 activityAdapter.notifyItemChanged(position);
+                List<Activity> activitiesForDate = activitiesMap.get(activity.getDate());
+                activitiesForDate.set(position, activity);
+                activitiesMap.put(activity.getDate(), activitiesForDate);
+
+                userInformation.put(selectedDate, new Information(activitiesMap.get(activity.getDate()), dailyEmission));
+                saveData(userInformation);
+
+                emissionTextView.setText("Total Emission: " + dailyEmission + "kg CO₂");
+
                 Toast.makeText(this, "Activity Updated!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Description cannot be empty", Toast.LENGTH_SHORT).show();
@@ -343,7 +383,10 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void deleteActivity(Activity activity, int position) {
+        double emissionToRemove = currentDateActivities.get(position).getEmission();
         currentDateActivities.remove(position);
+
+
         if (activitiesMap.containsKey(selectedDate)) {
             activitiesMap.get(selectedDate).remove(activity);
 
@@ -351,7 +394,12 @@ public class CalendarActivity extends AppCompatActivity {
                 activitiesMap.remove(selectedDate);
             }
         }
+
+        dailyEmission = calculateDailyEmission(selectedDate);
         activityAdapter.notifyItemRemoved(position);
+        userInformation.put(selectedDate, new Information(currentDateActivities, dailyEmission));
+        saveData(userInformation);
+        emissionTextView.setText("Total Emission: " + dailyEmission + "kg CO₂");
         Toast.makeText(this, "Activity Deleted!", Toast.LENGTH_SHORT).show();
     }
 
@@ -359,27 +407,223 @@ public class CalendarActivity extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         return sdf.format(new Date(timeInMillis));
     }
-//    private void habitLogReminder(){
-//        List<Acitvity> activityList; //get activity from firebase
-//        //may be original gethabit is list<string>, need to be updated
-//        ArrayList<Habit> habitlist = getHabits2();
-//        boolean if_logged = false;
-//        for (Acitvity activity : activityList) {
-//            for(Habit habit : habitlist){
-//                if(activity.getCategory == habit.getCategroy){
-//                    if_logged = true;
-//                    break;
-//                }
-//            }
-//        }
-//        if (!if_logged){
-//            new AlertDialog.Builder(this).setTitle("Habits are waiting to be logged!")
-//                    .setPositiveButton("Got it", (dialog, which) -> {
-//                        dialog.dismiss();
-//                    })
-//                    .show();
-//        }
-//    }
+    public double calculateEmission(String mainType, String secondType, @Nullable String nestedOption, String userInput){
+        String type = mainType.toLowerCase();
+        String subType = secondType.toLowerCase();
+        String detail = null;
+        if (nestedOption != null) {
+            detail = nestedOption.toLowerCase();
+        }
+        double input = parseToNumber(userInput);
+        double result = 0;
+        if (type.equals("transportation")) {
+            switch (subType) {
+                case "drive personal vehicle":
+                    result = logDriving(input);
+                    break;
+                case "public transportation":
+                    result = logPublicTransport(input, detail);
+                    break;
+                case "cycling or walking":
+                    result = logCyclingWalking(input);
+                    break;
+                case "flight":
+                    result = logFlights(input, detail);
+                    break;
+                default:
+                    Toast.makeText(this, "Unknown transport type", Toast.LENGTH_SHORT).show();
+            }
+        } else if (type.equals("food")) {
+            switch (subType) {
+                case "beef":
+                    result = logBeef(input);
+                    break;
+                case "pork":
+                    result = logPork(input);
+                    break;
+                case "chicken":
+                    result = logChicken(input);
+                    break;
+                case "fish":
+                    result = logFish(input);
+                    break;
+                case "plant-based":
+                    result = logPlant(input);
+                    break;
+                default:
+                    Toast.makeText(this, "Unknown transport type", Toast.LENGTH_SHORT).show();
+            }
+        } else if (type.equals("consumption")) {
+            switch (subType) {
+                case "buy new clothes":
+                    result = logBuyNewClothes(input);
+                    break;
+                case "buy electronics":
+                    result = logBuyElectronics(input);
+                    break;
+                case "other purchases":
+                    result = logOtherPurchases(input);
+                    break;
+                case "energy bills":
+                    result = logEnergyBills(input, detail);
+                    break;
+                default:
+                    Toast.makeText(this, "Unknown transport type", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+        return result;
+
+    }
+    private double logDriving(double input) {
+        if (input == 0.0) {
+            Toast.makeText(this, "Please enter distance driven", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        double emissionsPerKm = 0.24;
+
+        return input * emissionsPerKm;
+    }
+
+    private double logPublicTransport(double input, String detail) {
+        double emissionsPerKm = 0.2;
+        if (detail != null) {
+            if (detail.equals("bus")) {
+                emissionsPerKm = 0.15;
+            } else if (detail.equals("train")) {
+                emissionsPerKm = 0.1;
+            } else if (detail.equals("subway")) {
+                emissionsPerKm = 0.05;
+            }
+        }
+        if (input == 0.0) {
+            Toast.makeText(this, "Please enter time spent on public transport", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        return input * emissionsPerKm;
+    }
+
+    private double logCyclingWalking(double input) {
+        return input * 0;
+    }
+
+    private double logFlights(double input, String detail) {
+        if (input == 0.0) {
+            Toast.makeText(this, "Please enter number of flights", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        double emissionsPerFlight = 0.5;
+        if (detail != null) {
+            if (detail.equals("long-haul")) {
+                emissionsPerFlight = 2.0;
+            }
+        }
+
+        return input * emissionsPerFlight;
+    }
+
+    private double logBeef(double input) {
+        if (input == 0.0) {
+            Toast.makeText(this, "Please enter number of serving consumed", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        return input * 0.6;
+    }
+
+    private double logPork(double input) {
+        if (input == 0.0) {
+            Toast.makeText(this, "Please enter number of serving consumed", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        return input * 0.3;
+    }
+
+    private double logChicken(double input) {
+        if (input == 0.0) {
+            Toast.makeText(this, "Please enter number of serving consumed", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        return input * 0.2;
+    }
+
+    private double logFish(double input) {
+        if (input == 0.0) {
+            Toast.makeText(this, "Please enter number of serving consumed", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        return input * 0.1;
+    }
+
+    private double logPlant(double input) {
+        if (input == 0.0) {
+            Toast.makeText(this, "Please enter number of serving consumed", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        return input * 0.25;
+    }
+
+    private double logBuyNewClothes(double input) {
+        if (input == 0.0) {
+            Toast.makeText(this, "Please enter number of clothing iterms purchased", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        return input * 0.1;
+    }
+
+    private double logBuyElectronics(double input) {
+        if (input == 0.0) {
+            Toast.makeText(this, "Please enter number of devices purchased", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        return input * 0.1;
+    }
+
+    private double logOtherPurchases(double input) {
+        if (input == 0.0) {
+            Toast.makeText(this, "Please enter number of other purchases", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        return input * 0.5;
+    }
+
+    private double logEnergyBills(double input, String detail) {
+        double factor = 0.5;
+        if (detail != null) {
+            if (detail.equals("Electricity")) {
+                factor = 1;
+            } else if (detail.equals("Gas")) {
+                factor = 0.8;
+            } else if (detail.equals("Water")) {
+                factor = 0.5;
+            }
+        }
+        return input * factor;
+    }
+
+
+    public double parseToNumber(String input) {
+        String numericString = input.replaceAll("[^\\d.]", "");
+
+        try {
+            return Double.parseDouble(numericString);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid input", Toast.LENGTH_SHORT).show();
+            return 0.0;
+        }
+    }
+    public double calculateDailyEmission(String date){
+        double result = 0;
+        if (activitiesMap.get(date) == null){
+            return 0;
+        }
+        for(Activity activity : currentDateActivities) {
+            result += activity.getEmission();
+        }
+        return result;
+    }
+    public void saveData(Map<String, Information> map){
+        databaseReference.child(currentUser.getUid()).setValue(map);
+    }
 }
 
 

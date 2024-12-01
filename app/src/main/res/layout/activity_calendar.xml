@@ -101,8 +101,14 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activitiesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="8dp" />
 
+    <TextView
+        android:id="@+id/dailyEmissionView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Total Emission: 0.0 kg CO₂"/>
 
 </LinearLayout>
