@@ -97,7 +97,7 @@ public class CalendarActivity extends AppCompatActivity {
                         habitList.add(habit);
                     }
 
-                    user.setHabitList(habitList);
+//                    user.setHabitList(habitList);
 
                 } else {
                     Log.d("Firebase", "User does not exist.");
@@ -317,6 +317,7 @@ public class CalendarActivity extends AppCompatActivity {
             for (Habit habit : habitList){
                 if (habit.getCategory().equal(subcategory)){
                     habit.upDateProgress(1);
+                    break;
                 }
             }
             updateRecyclerView();
@@ -622,7 +623,7 @@ public class CalendarActivity extends AppCompatActivity {
         return result;
     }
     public void saveData(Map<String, Information> map){
-        databaseReference.child(currentUser.getUid()).setValue(map);
+        databaseReference.child(currentUser.getUid()).child("userInformation").setValue(map);
     }
 }
 
