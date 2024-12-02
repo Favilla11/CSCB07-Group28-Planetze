@@ -30,7 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="65dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="65dp"
                 android:layout_marginBottom="15dp"
                 android:layout_weight="1"
                 android:padding="6dp"
@@ -55,14 +55,16 @@
                     <!--View to display the yellow color icon-->
                     <View
                         android:layout_width="15dp"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:visibility="visible" />
 
                     <!--Text view to display R -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
-                        android:text="R" />
+                        android:text="Transportation"
+                        android:textSize="10sp" />
 
                 </LinearLayout>
 
@@ -80,10 +82,11 @@
 
                     <!--Text view to display python text -->
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="55dp"
+                        android:layout_height="match_parent"
                         android:paddingLeft="10dp"
-                        android:text="Python" />
+                        android:text="Energy Use"
+                        android:textSize="10sp" />
 
                 </LinearLayout>
 
@@ -104,7 +107,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
-                        android:text="C++" />
+                        android:text=" Food Consumption"
+                        android:textSize="10sp" />
 
                 </LinearLayout>
 
@@ -125,7 +129,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
-                        android:text="Java" />
+                        android:text=" Shopping Consumption "
+                        android:textSize="10sp" />
 
                 </LinearLayout>
 

@@ -23,16 +23,16 @@ public class LineChartController {
     public void SetChart(){
         ValueLineSeries series = new ValueLineSeries();
         // TODO: change colour
-        series.setColor(0xFF56B7F1);
-        int length=line_chart_data.size();
+        series.setColor(0xFF009999);
+        /*int length=line_chart_data.size();
         String date="";
         for(int i=0; i<length; i++){
             Date ithDate=line_chart_data.get(i).date;
             SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
             String formattedDate = sdf.format(ithDate);
             series.addPoint(new ValueLinePoint(formattedDate, line_chart_data.get(i).emission));
-        }
-        /*series.addPoint(new ValueLinePoint("Jan", 2.4f));
+        }*/
+        series.addPoint(new ValueLinePoint("Jan", 2.4f));
         series.addPoint(new ValueLinePoint("Feb", 3.4f));
         series.addPoint(new ValueLinePoint("Mar", .4f));
         series.addPoint(new ValueLinePoint("Apr", 1.2f));
@@ -43,7 +43,7 @@ public class LineChartController {
         series.addPoint(new ValueLinePoint("Sep", 2.4f));
         series.addPoint(new ValueLinePoint("Oct", 3.4f));
         series.addPoint(new ValueLinePoint("Nov", .4f));
-        series.addPoint(new ValueLinePoint("Dec", 1.3f));*/
+        series.addPoint(new ValueLinePoint("Dec", 1.3f));
 
         this.mCubicValueLineChart.addSeries(series);
         this.mCubicValueLineChart.startAnimation();

@@ -31,11 +31,11 @@ public class EcoGaugeActivity extends AppCompatActivity {
 
         TextView totalEmission=findViewById(R.id.TotalEmission);
         // TODO: get value from firebase
-        totalEmission.setText("the value is");
+        totalEmission.setText("You have emitted "+"kg of CO2 this month.");
 
         // TODO: get value from firebase
         TextView globalComparison=findViewById(R.id.GlobalComparison);
-        globalComparison.setText("the comparison is ");
+        globalComparison.setText("Your carbon emission is of "+"% in comparison to global average.");
 
 
     }

@@ -16,8 +16,6 @@ public class PieGraphController {
     public static PieChart mPieChart;
 
     public PieGraphController(PieChart mPieChart){ //add all data from firebase
-
-
         PieGraphController.mPieChart =mPieChart;
     }
 
@@ -25,10 +23,10 @@ public class PieGraphController {
         PieModel series=new PieModel();
 
         // TODO: implement
-        mPieChart.addPieSlice(new PieModel("Freetime", 15, Color.parseColor("#FE6DA8")));
-        mPieChart.addPieSlice(new PieModel("Sleep", 25, Color.parseColor("#56B7F1")));
-        mPieChart.addPieSlice(new PieModel("Work", 35, Color.parseColor("#CDA67F")));
-        mPieChart.addPieSlice(new PieModel("Eating", 9, Color.parseColor("#FED70E")));
+        mPieChart.addPieSlice(new PieModel("Transportation", 15, Color.parseColor("#A9BCD0")));
+        mPieChart.addPieSlice(new PieModel("Energy", 25, Color.parseColor("#1b1b1e")));
+        mPieChart.addPieSlice(new PieModel("Food Consumption", 35, Color.parseColor("#009999")));
+        mPieChart.addPieSlice(new PieModel("Shopping Consumption", 9, Color.parseColor("#373F51")));
         mPieChart.startAnimation();
     }
 }
