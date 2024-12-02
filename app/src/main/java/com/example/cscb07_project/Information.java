@@ -1,3 +1,8 @@
+
+package com.example.cscb07_project;
+
+import java.util.List;
+
 public class Information {
     private List<Activity> activityList;
     private double dailyEmission;

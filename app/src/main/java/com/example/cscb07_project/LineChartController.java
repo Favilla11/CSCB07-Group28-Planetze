@@ -7,6 +7,9 @@ import org.eazegraph.lib.models.ValueLineSeries;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 // sets data retrieved from Retriever to graph
 public class LineChartController {
@@ -19,19 +22,19 @@ public class LineChartController {
         this.mCubicValueLineChart=mCubicValueLineChart;
     }
 
-    public void SetChart(){
+    public void SetChart(Map<String, Information> userInformation){
         ValueLineSeries series = new ValueLineSeries();
-        // TODO: change colour
         series.setColor(0xFF009999);
-        /*int length=line_chart_data.size();
+        int length=userInformation.size();
         String date="";
+        Set<String> allSetDate = new HashSet<>(userInformation.keySet());
+        ArrayList<String> allDate = new ArrayList<>(allSetDate);
+
         for(int i=0; i<length; i++){
-            Date ithDate=line_chart_data.get(i).date;
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
-            String formattedDate = sdf.format(ithDate);
-            series.addPoint(new ValueLinePoint(formattedDate, line_chart_data.get(i).emission));
-        }*/
-        series.addPoint(new ValueLinePoint("Jan", 2.4f));
+            date=allDate.get(i);
+            series.addPoint(new ValueLinePoint(date, (float)userInformation.get(date).getDailyEmission()));
+        }
+        /*series.addPoint(new ValueLinePoint("Jan", 2.4f));
         series.addPoint(new ValueLinePoint("Feb", 3.4f));
         series.addPoint(new ValueLinePoint("Mar", .4f));
         series.addPoint(new ValueLinePoint("Apr", 1.2f));
@@ -42,7 +45,7 @@ public class LineChartController {
         series.addPoint(new ValueLinePoint("Sep", 2.4f));
         series.addPoint(new ValueLinePoint("Oct", 3.4f));
         series.addPoint(new ValueLinePoint("Nov", .4f));
-        series.addPoint(new ValueLinePoint("Dec", 1.3f));
+        series.addPoint(new ValueLinePoint("Dec", 1.3f));*/
 
         this.mCubicValueLineChart.addSeries(series);
         this.mCubicValueLineChart.startAnimation();

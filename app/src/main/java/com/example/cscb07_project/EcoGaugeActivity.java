@@ -22,37 +22,47 @@ import com.google.firebase.database.ValueEventListener;
 import org.eazegraph.lib.charts.ValueLineChart;
 import org.eazegraph.lib.charts.PieChart;
 
+import java.util.Map;
+
 public class EcoGaugeActivity extends AppCompatActivity {
 
-    private double Transportation, Housing,  Food, Shopping;
+    private double Transportation, Housing, Food, Shopping;
     private double totalEmission;
     private double yearlyEmission;
-
+    private Double total;
+    private Map<String, Information> userInformation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("EcoGauge","created");
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_eco_gauge);
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users");
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        ref.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        ref.child("3rwLTVZ280dKkoGEqKlgOfLv6Rf2").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user= snapshot.getValue(User.class);
+                 total = snapshot.child("totalFootPrint").getValue(Double.class);
+//                Transportation = user.getTransportationFootprint();
+//                Housing = user.getHouseFootprint();
+//                Food = user.getFoodFootprint();
+//                Shopping = user.getConsumptionFootprint();
+//                totalEmission = user.getTotalFootprint();
+//                yearlyEmission = user.getTotalFootprint();
+//                userInformation = user.getUserInformation();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("EcoGauge","loadPost:onCancelled");
             }
         });
-
         ValueLineChart mCubicValueLineChart = findViewById(R.id.cubiclinechart);
         LineChartController lineChartController=new LineChartController(mCubicValueLineChart);
-        lineChartController.SetChart();
+        lineChartController.SetChart(userInformation);
 
         PieChart mPieChart = findViewById(R.id.piechart);
         PieGraphController pieChartController=new PieGraphController(mPieChart);
@@ -60,7 +70,7 @@ public class EcoGaugeActivity extends AppCompatActivity {
 
         TextView totalEmission=findViewById(R.id.TotalEmission);
         // TODO: get value from firebase
-        totalEmission.setText("You have emitted "+"kg of CO2 this year.");
+        totalEmission.setText("You have emitted "+total+"kg of CO2 this year.");
 
         // TODO: get value from firebase
         TextView globalComparison=findViewById(R.id.GlobalComparison);

@@ -1,4 +1,4 @@
-import com.example.cscb07_project.Information;
+package com.example.cscb07_project;
 
 import java.util.Map;
 
@@ -6,7 +6,7 @@ public class User {
     private String userName;
     private String email;
     private String password;
-    //    private List<Habit> habitList;
+//        private List<Habit> habitList;
     private double totalFootprint, transportationFootprint, foodFootprint, houseFootprint, consumptionFootprint;
     private Map<String, Information> userInformation;
 
