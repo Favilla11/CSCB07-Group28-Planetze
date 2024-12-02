@@ -16,6 +16,5 @@ public class Retriever {
     }
 
     public void Comparison(){
-
     }
 }

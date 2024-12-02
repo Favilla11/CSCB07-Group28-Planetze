@@ -25,16 +25,6 @@ public class ExampleUnitTest {
     @Mock
     LogInModel model;
 
-    @Mock
-    LogInPresenter presenter;
-
-    /*@Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        presenter = new LogInPresenter(view);
-        presenter.model = model; // assuming model is package-private
-    }*/
-
 
     @Test
     public void checkEmptyCredential(){

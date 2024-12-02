@@ -24,7 +24,7 @@ public class PieGraphController {
 
         // TODO: implement
         mPieChart.addPieSlice(new PieModel("Transportation", 15, Color.parseColor("#A9BCD0")));
-        mPieChart.addPieSlice(new PieModel("Energy", 25, Color.parseColor("#1b1b1e")));
+        mPieChart.addPieSlice(new PieModel("Housing", 25, Color.parseColor("#1b1b1e")));
         mPieChart.addPieSlice(new PieModel("Food Consumption", 35, Color.parseColor("#009999")));
         mPieChart.addPieSlice(new PieModel("Shopping Consumption", 9, Color.parseColor("#373F51")));
         mPieChart.startAnimation();

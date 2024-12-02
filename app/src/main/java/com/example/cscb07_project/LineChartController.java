@@ -11,7 +11,6 @@ import java.util.ArrayList;
 // sets data retrieved from Retriever to graph
 public class LineChartController {
 // TODO: get actual data from firebase
-    ArrayList<DailyEmissionData> line_chart_data;
     public ValueLineChart mCubicValueLineChart;
     public LineChartController(ValueLineChart mCubicValueLineChart){ //add all data from firebase
 

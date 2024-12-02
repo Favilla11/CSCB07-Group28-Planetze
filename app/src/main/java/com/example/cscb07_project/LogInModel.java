@@ -37,12 +37,8 @@ public class LogInModel {
                 Log.d("AAA", "onComplete: " + (newuser ? "new user" : "old user"));
 
                 if(newuser){
-
-                    //Do Stuffs for new user
                     Log.d("MyApp", "is new user");
-
                 }else{
-
                     Log.d("MyApp", "not new user");
                 }
 

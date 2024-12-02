@@ -27,7 +27,7 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
         loginButton = findViewById(R.id.ResetPasswordButton);
         redirectToSignUp = findViewById(R.id.redirectToSignUp);
 
-        presenter = new LogInPresenter(this, new LogInModel()); //
+        presenter = new LogInPresenter(this, new LogInModel());
 
         loginButton.setOnClickListener(v -> {
             String email = emailEditText.getText().toString().trim();

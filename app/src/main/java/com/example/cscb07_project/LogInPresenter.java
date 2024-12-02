@@ -49,7 +49,7 @@ public class LogInPresenter {
 
             @Override
             public void onError(String error) {
-                view.setEmailError(error); // or show a general error
+                view.setEmailError(error);
             }
         });
     }
