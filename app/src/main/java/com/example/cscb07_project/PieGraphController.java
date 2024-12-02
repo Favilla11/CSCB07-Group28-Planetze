@@ -19,7 +19,7 @@ public class PieGraphController {
         PieGraphController.mPieChart =mPieChart;
     }
 
-    public static void SetChart(){
+    public static void SetChart(double Transportation, double Housing, double Food, double Shopping){
         PieModel series=new PieModel();
 
         // TODO: implement
