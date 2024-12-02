@@ -1,3 +1,5 @@
+import com.example.cscb07_project.Information;
+
 import java.util.Map;
 
 public class User {

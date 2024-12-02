@@ -49,8 +49,6 @@ public class EcoGaugeActivity extends AppCompatActivity {
                 Log.d("EcoGauge","loadPost:onCancelled");
             }
         });
-        totalEmission=user.totalFootprint;
-        transportationFootprint, foodFootprint, houseFootprint, consumptionFootprint
 
         ValueLineChart mCubicValueLineChart = findViewById(R.id.cubiclinechart);
         LineChartController lineChartController=new LineChartController(mCubicValueLineChart);
