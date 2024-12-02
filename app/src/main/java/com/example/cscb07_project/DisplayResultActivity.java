@@ -88,17 +88,11 @@ public class DisplayResultActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.child("IhK4jMbm7HPcKYaVfFNExx37jdJ2").child("totalFootprint").setValue(total).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("Database", "User data saved successfully");
-                    } else {
-                        Log.e("Database", "Failed to save user data", task.getException());
-                    }
-                });
-                db.child("IhK4jMbm7HPcKYaVfFNExx37jdJ2").child("transportationFootprint").setValue(transportPercent);
-                db.child("IhK4jMbm7HPcKYaVfFNExx37jdJ2").child("foodFootprint").setValue(foodPercent);
-                db.child("IhK4jMbm7HPcKYaVfFNExx37jdJ2").child("houseFootprint").setValue(housingPercent);
-                db.child("IhK4jMbm7HPcKYaVfFNExx37jdJ2").child("consumptionFootprint").setValue(consumptionPercent);
+                db.child(currentUser.getUid()).child("totalFootprint").setValue(total);
+                db.child(currentUser.getUid()).child("transportationFootprint").setValue(transportPercent);
+                db.child(currentUser.getUid()).child("foodFootprint").setValue(foodPercent);
+                db.child(currentUser.getUid()).child("houseFootprint").setValue(housingPercent);
+                db.child(currentUser.getUid()).child("consumptionFootprint").setValue(consumptionPercent);
                 navigateToCompare();
             }
         });
