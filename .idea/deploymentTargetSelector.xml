@@ -8,7 +8,7 @@
       <SelectionState runConfigName="QuestionnaireActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="CompareActivity">
+      <SelectionState runConfigName="DisplayResultActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
