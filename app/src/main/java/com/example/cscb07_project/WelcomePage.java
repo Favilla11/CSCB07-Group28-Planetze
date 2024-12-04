@@ -22,13 +22,21 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 public class WelcomePage extends AppCompatActivity {
 
-
+    private Button questionaireButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
+        questionaireButton = findViewById(R.id.nextButton);
+        questionaireButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(WelcomePage.this, QuestionaireActvity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
 }
