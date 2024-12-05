@@ -221,13 +221,13 @@ public class QuestionnaireActivity extends AppCompatActivity {
     }
     private void initRegions() throws IOException {
 
-        try (InputStream inputStream = getAssets().open("D:\\CSCB07-Group28-Planetze\\app\\build\\intermediates\\assets\\Global_Averages.csv");
+        try (InputStream inputStream = getAssets().open("Global_Averages.csv");
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
+            String line = reader.readLine();
 
+            while ((line = reader.readLine()) != null) {
                 System.out.println(line);
-                String[] parts = line.split("\t");
+                String[] parts = line.split(",");
                 if (parts.length > 0) {
                     regions.add(parts[0]);
                 }

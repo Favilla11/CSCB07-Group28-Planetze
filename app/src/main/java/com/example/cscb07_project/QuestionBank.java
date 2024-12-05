@@ -24,7 +24,7 @@ public class QuestionBank {
         questions.add(new Question(6, "How many short-haul flights (less than 1,500 km / 932 miles) have you taken in the past year?","Transportation", options6));
 
         String[] options7 = {"None", "1-2 flights","3-5 flights","6-10 flights","More than 10 flights"};
-        questions.add(new Question(7, "How many long-haul flights (more than 1,500 km / 932 miles) have you taken in the past year??","Transportation", options7));
+        questions.add(new Question(7, "How many long-haul flights (more than 1,500 km / 932 miles) have you taken in the past year?","Transportation", options7));
 
         String[] options8 = {"Vegetarian", "Vegan","Pescatarian (fish/seafood)","Meat-based (eat all types of animal products)"};
         questions.add(new Question(8, "What best describes your diet?","Food", options8));

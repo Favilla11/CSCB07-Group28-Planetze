@@ -4,121 +4,134 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_image"
     tools:context=".QuestionnaireActivity">
 
     <ScrollView
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
-            
+            android:gravity="bottom|center_horizontal"
+            android:orientation="vertical">
+
             <!-- Question Text -->
+
+            <!-- RadioGroup to hold the options -->
+
             <TextView
                 android:id="@+id/questionText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_height="89dp"
+                android:layout_marginTop="200dp"
+                android:layout_marginBottom="30dp"
+                android:rotationY="0"
                 android:text="Question Text"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <!-- RadioGroup to hold the options -->
             <RadioGroup
                 android:id="@+id/radioGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="30dp"/>
+                android:layout_marginBottom="30dp"
+                android:orientation="vertical" />
 
-	    <!-- regionLabel selectors -->
+            <!-- regionLabel selectors -->
+
+            <!-- Region Selection Spinner -->
+
+            <!-- Beef frequency selectors -->
             <TextView
                 android:id="@+id/regionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Region:"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="30dp"
+                android:text="Region:" />
 
-            <!-- Region Selection Spinner -->
             <Spinner
                 android:id="@+id/regionSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"/>
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginBottom="30dp"
+                android:layout_weight="30" />
 
-            <!-- Beef frequency selectors -->
             <TextView
                 android:id="@+id/beefLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Beef Frequency:"
                 android:layout_marginBottom="8dp"
+                android:text="Beef Frequency:"
                 android:visibility="gone" />
+
             <Spinner
                 android:id="@+id/beefSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <!-- Pork frequency selectors -->
             <TextView
                 android:id="@+id/porkLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pork Frequency:"
                 android:layout_marginBottom="8dp"
+                android:text="Pork Frequency:"
                 android:visibility="gone" />
+
             <Spinner
                 android:id="@+id/porkSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <!-- Chicken frequency selectors -->
             <TextView
                 android:id="@+id/chickenLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Chicken Frequency:"
                 android:layout_marginBottom="8dp"
+                android:text="Chicken Frequency:"
                 android:visibility="gone" />
+
             <Spinner
                 android:id="@+id/chickenSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <!-- Fish frequency selectors -->
             <TextView
                 android:id="@+id/fishLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fish Frequency:"
                 android:layout_marginBottom="8dp"
+                android:text="Fish Frequency:"
                 android:visibility="gone" />
+
             <Spinner
                 android:id="@+id/fishSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <!-- Next Button -->
             <Button
                 android:id="@+id/nextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:text="Next"
-                android:textSize="16sp"
-                android:layout_marginTop="20dp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
     </ScrollView>
