@@ -29,6 +29,7 @@ public class Driver {
 				e.printStackTrace();
 			}
 		}
+		//gets all info from formula sheet to get carbon emissions
 		HashMap<Integer, String> storedAnswer = new HashMap<>();
 		double footprint = 0;
 		
@@ -83,6 +84,8 @@ public class Driver {
 			}
 			footprint = footprint + dist*emmision;
 		}
+
+		//gets carbon emissions from driving
 		int column = 0;
 		int row = 0;
 		boolean transport = false;
@@ -119,12 +122,12 @@ public class Driver {
 		{
 			row = 5;
 		}
-		
+		//assigns column based on frequency and row on time to find the right value from datasheet
 		if(transport)
 		{
 			footprint = footprint + Double.parseDouble(graph.get(row)[column]);
 		}
-		
+
 		if(storedAnswer.get(6).equals("1-2 flights"))
 		{
 			footprint = footprint + 225;
@@ -162,7 +165,8 @@ public class Driver {
 		{
 			footprint = footprint + 6600;
 		}
-		
+		//gets carbon footprint from flights
+
 		if(storedAnswer.get(8).equals("Vegetarian"))
 		{
 			footprint = footprint + 1000;
@@ -182,7 +186,7 @@ public class Driver {
 			boolean eat = false;
 			for(int i = 1; i <= 4; i++)
 			{
-				
+				//gets the carbon value each of meat
 				if(meat[i].substring(1,2).equals("D"))
 				{
 					column = 4;
@@ -199,6 +203,7 @@ public class Driver {
 					column = 6;
 					eat = true;
 				}
+				//gets appropriate carbon emission value based on frequency
 				if(eat)
 				{
 					footprint = footprint + Double.parseDouble(graph.get(i)[column]);
@@ -220,7 +225,9 @@ public class Driver {
 		{
 			footprint = footprint + 140.4;
 		}
-		
+
+
+
 		boolean energy = true;
 		
 		
@@ -322,6 +329,8 @@ public class Driver {
 		{
 			footprint = footprint + Double.parseDouble(graph.get(row)[column]);
 		}
+
+		//uses all data to find footprint of housing, using all factors for row and column
 		
 		if(!storedAnswer.get(14).equals(storedAnswer.get(16)))
 		{
@@ -372,7 +381,7 @@ public class Driver {
 		{
 			product = product*0.3;
 		}
-		
+		//gets footprint of purchases
 		footprint = footprint + product;
 		
 		if(storedAnswer.get(20).equals("1"))
@@ -410,7 +419,7 @@ public class Driver {
 		{
 			footprint = footprint - Double.parseDouble(graph.get(row)[column]);
 		}
-		
+		//gets carbon reduction due to recycling
 		
 		
 	}
