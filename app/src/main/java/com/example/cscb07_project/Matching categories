@@ -1,0 +1,13 @@
+String[] mvplist = {"Bike or Walk to work", "Take the bus", "Fly less", "Make more of your diet vegetables", "Eat less meat", "Buy less clothes", "Buy less electronics",
+				"Takes shorter showers", "Use natural light"};
+
+		String[] subcategories = {"Drive Personal Vehicle", "Public Transportation", "Cycling or Walking", "Flight", "Beef", "Pork", "Chicken", "Fish", "Plant-Based", 
+				"Buy New Clothes", "Buy Electronics", "Other Purchases", "Energy Bills"};
+
+Bike or Walk to work - Cycling or Walking
+Take the bus - Public Transportation
+Fly less - Flight
+Make more of your diet vegetables, Eat less meat - Plant-Based
+Buy less clothes - Buy New Clothes
+Buy less electronics - Buy Electronics
+"Takes shorter showers", "Use natural light"  - Energy Bills
