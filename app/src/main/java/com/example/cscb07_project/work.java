@@ -163,43 +163,19 @@ public class work {
 		return suggestions;
 	}
 
-
-	public static void main(String [] args) {
-
-		ArrayList<Habit> premadesuggestions = new ArrayList<Habit>();
-
-		premadesuggestions.add(new Habit("Cycling or Walking", 0, 0, "Bike or Walk to work", 0));
-
-		premadesuggestions.add(new Habit("Public Transportation", 0, 0, "Take the bus", 0));
-
-		premadesuggestions.add(new Habit("Flight", 0, 0, "Fly less", 0));
-
-		premadesuggestions.add(new Habit("Plant-Based", 0, 0, "Make more of your diet vegetables", 0));
-
-		premadesuggestions.add(new Habit("Beef", 0, 0, "Eat less beef", 0));
-
-		premadesuggestions.add(new Habit("Buy New Clothes", 0, 0, "Buy less clothes", 0));
-
-		premadesuggestions.add(new Habit("Buy Electronics", 0, 0, "Buy less electronics", 0));
-
-		premadesuggestions.add(new Habit("Energy Bills", 0, 0, "Takes shorter showers", 0));
-
-		premadesuggestions.add(new Habit("Energy Bills", 0, 0, "Use natural light", 0));
-
-		//makes list of pre made habits to suggest
-
-
-		String[] subcategories = {"Drive Personal Vehicle", "Public Transportation", "Cycling or Walking", "Flight", "Beef", "Pork", "Chicken", "Fish", "Plant-Based",
-				"Buy New Clothes", "Buy Electronics", "Other Purchases", "Energy Bills"};
-
+	/**
+	 * Creates personalized habit recommendations based on the user's info
+	 *
+	 *
+	 * @param info		info of the user
+	 * @return          f list of personalized habits;
+	 * @since           1.0
+	 */
+	public ArrayList<Habit> PersonalizedHabits(Information Info) {
 		double average = 14.249212;
 		//average daily emission of canadians
 
 		double factor = 0.1;
-
-
-
-		Information info;
 
 		if (info.getDailyEmission() > average)
 		{
@@ -254,7 +230,38 @@ public class work {
 		}
 
 		//goes through list and makes personalized habit suggestions based on the activity of the user, using the factor to calculate how to bring the emissions down to average
+		return suggestions;
+	}
 
+
+
+	public static void main(String [] args) {
+
+		ArrayList<Habit> premadesuggestions = new ArrayList<Habit>();
+
+		premadesuggestions.add(new Habit("Cycling or Walking", 0, 0, "Bike or Walk to work", 0));
+
+		premadesuggestions.add(new Habit("Public Transportation", 0, 0, "Take the bus", 0));
+
+		premadesuggestions.add(new Habit("Flight", 0, 0, "Fly less", 0));
+
+		premadesuggestions.add(new Habit("Plant-Based", 0, 0, "Make more of your diet vegetables", 0));
+
+		premadesuggestions.add(new Habit("Beef", 0, 0, "Eat less beef", 0));
+
+		premadesuggestions.add(new Habit("Buy New Clothes", 0, 0, "Buy less clothes", 0));
+
+		premadesuggestions.add(new Habit("Buy Electronics", 0, 0, "Buy less electronics", 0));
+
+		premadesuggestions.add(new Habit("Energy Bills", 0, 0, "Takes shorter showers", 0));
+
+		premadesuggestions.add(new Habit("Energy Bills", 0, 0, "Use natural light", 0));
+
+		//makes list of pre made habits to suggest
+
+
+		String[] subcategories = {"Drive Personal Vehicle", "Public Transportation", "Cycling or Walking", "Flight", "Beef", "Pork", "Chicken", "Fish", "Plant-Based",
+				"Buy New Clothes", "Buy Electronics", "Other Purchases", "Energy Bills"};
 
 
 	}
