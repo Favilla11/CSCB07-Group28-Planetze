@@ -41,9 +41,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class HabitSuggestionActivity extends AppCompatActivity {
@@ -66,6 +69,11 @@ public class HabitSuggestionActivity extends AppCompatActivity {
     private EditText impactUpperBound;
     private FirebaseDatabase database;
     private DatabaseReference realtimeRef;
+    private SimpleDateFormat dateFormat;
+    private Calendar calendar;
+    private String todayDate;
+    private ListView personalizedSuggestion;
+    private ArrayAdapter<String> personalizedSuggestionAdapter;
 
     //*******private List<Habit> habitList;
 
@@ -84,24 +92,27 @@ public class HabitSuggestionActivity extends AppCompatActivity {
         realtimeRef =  database.getReference("users");
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
-        userName = currentUser.getDisplayName();
+
         userId = currentUser.getUid();
         adoptedHabitList = new ArrayList<>();
         typeSpinner = findViewById(R.id.typeSpinner);
         initializeTypeSpinner();
         impactLowerBound = findViewById(R.id.ImpactLowerbound);
         impactUpperBound = findViewById(R.id.ImpactUpperbound);
+        dateFormat =  new SimpleDateFormat("yyyy-MM-d", Locale.getDefault());
+        calendar = Calendar.getInstance();
+        todayDate = dateFormat.format(calendar.getTime());
 
 
         //Pre-defined Habit List
         predefinedSuggestionList = new ArrayList<Habit>();
-        predefinedSuggestionList.add(new Habit("Cycling or Walking",0, "Biking or Walking to work",0));
-        predefinedSuggestionList.add(new Habit("Public Transportation",0, "Taking the bus",0));
-        predefinedSuggestionList.add(new Habit("Flight",0, "Taking No flight",0));
-        predefinedSuggestionList.add(new Habit("Plant-Based",0, "Making more of diet vegetables ",0));
-        predefinedSuggestionList.add(new Habit("Buy New Clothes",0, "Buy no new clothes",0));
-        predefinedSuggestionList.add(new Habit("Buy Electronics",0, "Buy no eletronics",0));
-        predefinedSuggestionList.add(new Habit("Energy Bills",0, "Taking shorter showers",0));
+        predefinedSuggestionList.add(new Habit("Cycling or Walking",0, "Biking or Walking to work",0, 0));
+        predefinedSuggestionList.add(new Habit("Public Transportation",0, "Taking the bus",0, 0));
+        predefinedSuggestionList.add(new Habit("Flight",0, "Taking No flight",0, 0));
+        predefinedSuggestionList.add(new Habit("Plant-Based",0, "Making more of diet vegetables ",0, 0));
+        predefinedSuggestionList.add(new Habit("Buy New Clothes",0, "Buy no new clothes",0, 0));
+        predefinedSuggestionList.add(new Habit("Buy Electronics",0, "Buy no eletronics",0, 0));
+        predefinedSuggestionList.add(new Habit("Energy Bills",0, "Taking shorter showers",0, 0));
         predefinedSuggestionNames = new ArrayList<>();
         filteredResult = new ArrayList<>();
         predefinedSuggestionNames = getHabitStringList(predefinedSuggestionList);
@@ -118,22 +129,22 @@ public class HabitSuggestionActivity extends AppCompatActivity {
         });
 
         //LayoutGradiantAnimation
-        ConstraintLayout layout = findViewById(R.id.main);
-        ColorDrawable Layoutbackground = new ColorDrawable(Color.parseColor("green"));
-        layout.setBackground(Layoutbackground);
-
-        ObjectAnimator gradiant = ObjectAnimator.ofObject(Layoutbackground, "color", new ArgbEvaluator(),
-                Color.parseColor("#3F51B5"), Color.parseColor("#009999"));
-        gradiant.setDuration(3000);
-        gradiant.start();
-
-        //ButtonGradiantAnimation
-        ColorDrawable buttonbackground = new ColorDrawable(Color.parseColor("green"));
-        backButton.setBackground(buttonbackground);
-        ObjectAnimator Buttongradiant = ObjectAnimator.ofObject(buttonbackground, "color", new ArgbEvaluator(),
-                Color.parseColor("#3F51B5"), Color.parseColor("#009999"));
-        Buttongradiant.setDuration(3000);
-        Buttongradiant.start();
+//        ConstraintLayout layout = findViewById(R.id.main);
+//        ColorDrawable Layoutbackground = new ColorDrawable(Color.parseColor("green"));
+//        layout.setBackground(Layoutbackground);
+//
+//        ObjectAnimator gradiant = ObjectAnimator.ofObject(Layoutbackground, "color", new ArgbEvaluator(),
+//                Color.parseColor("#3F51B5"), Color.parseColor("#009999"));
+//        gradiant.setDuration(3000);
+//        gradiant.start();
+//
+//        //ButtonGradiantAnimation
+//        ColorDrawable buttonbackground = new ColorDrawable(Color.parseColor("green"));
+//        backButton.setBackground(buttonbackground);
+//        ObjectAnimator Buttongradiant = ObjectAnimator.ofObject(buttonbackground, "color", new ArgbEvaluator(),
+//                Color.parseColor("#3F51B5"), Color.parseColor("#009999"));
+//        Buttongradiant.setDuration(3000);
+//        Buttongradiant.start();
 
         //Search and list
         searchView = findViewById(R.id.searchView);
@@ -197,6 +208,49 @@ public class HabitSuggestionActivity extends AppCompatActivity {
         impactUpperBound.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 applyFilters(searchView.getQuery().toString());
+            }
+        });
+        DatabaseReference habitListRef = realtimeRef.child(userId);
+        habitListRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    User user = snapshot.getValue(User.class);
+                    if (user != null) {
+                        Map<String, Information> userInformation = user.getUserInformation();
+                        Information info = userInformation.get(todayDate);
+                        personalizedSuggestion = findViewById(R.id.personalizedSuggestion);
+                        personalizedSuggestionAdapter = new ArrayAdapter<>(
+                                HabitSuggestionActivity.this,
+                                android.R.layout.simple_list_item_1,
+                                new ArrayList<>(getHabitStringList(PersonalizedHabits(info)))
+                        );
+                        personalizedSuggestion.setAdapter(personalizedSuggestionAdapter);
+//                    callback.onUserInfoRetrieved(info);
+                    } else {
+//                    callback.onUserInfoRetrieved(null); // Handle case where user is null
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+//                callback.onError(error);
+               }
+        });
+
+
+
+        predefinedListView.setOnItemClickListener((parent, view, position, ID) -> {
+            Habit selectedHabit = predefinedSuggestionList.get(position);
+            boolean if_habit_already_exists = false;
+            for (Habit habit : adoptedHabitList) {
+                if (habit.getAct().equals(selectedHabit.getAct())) {
+                    if_habit_already_exists = true;
+                    Toast.makeText(HabitSuggestionActivity.this, "Already Adopted This Habit", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+            }
+            if (!if_habit_already_exists) {
+                ConfirmHabbit(selectedHabit);
             }
         });
 
@@ -270,7 +324,7 @@ public class HabitSuggestionActivity extends AppCompatActivity {
     }
 
     private void getUserHabits(){
-        DatabaseReference habitListRef = realtimeRef.child("3rwLTVZ280dKkoGEqKlgOfLv6Rf2").child("habitList");
+        DatabaseReference habitListRef = realtimeRef.child(userId).child("habitList");
         habitListRef.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -280,9 +334,12 @@ public class HabitSuggestionActivity extends AppCompatActivity {
                     String category = habitSnapshot.child("category").getValue(String.class);
                     Double progress = habitSnapshot.child("progress").getValue(Double.class);
                     Double impact = habitSnapshot.child("impact").getValue(Double.class);
+                    Double frequency = habitSnapshot.child("frequency").getValue(Double.class);
                     if (impact == null) impact = 0.0;
                     if (progress == null) progress = 0.0;
-                    adoptedHabitList.add(new Habit(category, progress, action, impact));
+                    if (frequency == null) frequency = 0.0;
+                    adoptedHabitList.add(new Habit(category, progress,action,impact, frequency));
+
                 }
                 adoptedHabitAdapter.notifyDataSetChanged();
             }
@@ -295,7 +352,7 @@ public class HabitSuggestionActivity extends AppCompatActivity {
         });
     }
     private void realTimeAddHabit(ArrayList<Habit> habitList){
-        realtimeRef.child("3rwLTVZ280dKkoGEqKlgOfLv6Rf2").child("habitList").setValue(habitList);
+        realtimeRef.child("c0TTmxo4P5bJQ83snICf3m2k01u2").child("habitList").setValue(habitList);
 
     }
 
@@ -435,4 +492,69 @@ public class HabitSuggestionActivity extends AppCompatActivity {
         adapter.addAll(getHabitStringList(filteredHabits));
         adapter.notifyDataSetChanged();
     }
+    public ArrayList<Habit> PersonalizedHabits(Information info) {
+        double average = 14.249212;
+
+        double factor = 0.1;
+        if (info == null) {Log.d("info fetched failed", "nfo fetched failed");}
+        if (info.getDailyEmission() > average)
+        {
+            factor = info.getDailyEmission();
+        }
+
+        ArrayList<Habit> suggestions = new ArrayList<Habit>();
+
+
+        for(int i = 0; i < info.getActivityList().size(); i++)
+        {
+            String[] description = info.getActivityList().get(i).getDescription().split(":");
+            double frequency = Double.parseDouble(description[description.length - 1].replaceAll("[^0-9\\\\.]", ""));
+            //gets the numerical value of the actity from the description
+            if(info.getActivityList().get(i).getSubCategory().equals("Drive Personal Vehicle"))
+            {
+
+                suggestions.add(new Habit("Drive Personal Vehicle", 0,  "Walk, bike or use more Public Transportation until Driving Distance: " + frequency*factor, info.getActivityList().get(i).getEmission()*factor,frequency*factor));
+            }
+
+            else if(info.getActivityList().get(i).getSubCategory().equals("Public Transportation"))
+            {
+
+                suggestions.add(new Habit("Public Transportation", 0,  "Plan routes more efficently until Public Transportation: " + frequency*factor, info.getActivityList().get(i).getEmission()*factor,frequency*factor));
+            }
+
+            else if(info.getActivityList().get(i).getSubCategory().equals("Flight"))
+            {
+
+                suggestions.add(new Habit("Flight", 0, "Fly less." + description[0] + ":" + description[0] + ":" + (int)(frequency*factor),info.getActivityList().get(i).getEmission()*factor,  (int)(frequency*factor)));
+            }
+
+            else if(info.getActivityList().get(i).getCategory().equals("Food")&&!(info.getActivityList().get(i).getSubCategory().equals("Plant-Based")))
+            {
+
+                suggestions.add(new Habit(info.getActivityList().get(i).getSubCategory(), 0,  "Eat less meat and more plant based food until "+info.getActivityList().get(i).getSubCategory()+": "+ frequency*factor,info.getActivityList().get(i).getEmission()*factor, frequency*factor));
+            }
+
+            else if(info.getActivityList().get(i).getCategory().equals("Consumption"))
+            {
+
+                suggestions.add(new Habit(info.getActivityList().get(i).getSubCategory(), 0,  info.getActivityList().get(i).getSubCategory()+" less until : "+ frequency*factor,info.getActivityList().get(i).getEmission()*factor, frequency*factor));
+            }
+
+            else if(info.getActivityList().get(i).getCategory().equals("Energy Bills"))
+            {
+
+                suggestions.add(new Habit(info.getActivityList().get(i).getSubCategory(), 0, "Take shorter showers, use less heating and AC, use natural light, use energy efficent products, until Energy Bill: " + frequency*factor, info.getActivityList().get(i).getEmission()*factor, frequency*factor));
+            }
+        }
+
+        //goes through list and makes personalized habit suggestions based on the activity of the user, using the factor to calculate how to bring the emissions down to average
+        return suggestions;
+    }
+
+//    public interface UserInfoCallback {
+//        void onUserInfoRetrieved(Information info);
+//        void onError(DatabaseError error);
+//    }
+
+
 }

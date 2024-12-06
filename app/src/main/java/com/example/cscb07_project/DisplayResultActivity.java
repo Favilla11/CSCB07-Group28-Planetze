@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,6 +32,10 @@ public class DisplayResultActivity extends AppCompatActivity {
     private String totalFootprint, transportFootprint, foodFootprint, housingFootprint, consumptionFootprint;
     private ArrayList<String[]> graph;
     private Button nextButton;
+    public String countryName, countryAverage;
+    private DatabaseReference db;
+    private FirebaseAuth auth;
+    private FirebaseUser currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,11 @@ public class DisplayResultActivity extends AppCompatActivity {
         consumptionValue = findViewById(R.id.consumptionValue);
         nextButton = findViewById(R.id.btn_next);
 
+        countryName = getIntent().getStringExtra("countryName");
+        countryAverage = getIntent().getStringExtra("countryAverage");
+        Log.d("ddd", countryName);
+        Log.d("ddd", countryAverage);
+
         HashMap<Integer, String> storedAnswer = (HashMap<Integer, String>) getIntent().getSerializableExtra("userResponse");
         graph = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(
@@ -60,36 +70,35 @@ public class DisplayResultActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         total = calculateFootprint(storedAnswer, graph).get(0);
-        transportPercent = total / calculateFootprint(storedAnswer, graph).get(1) * 100;
-        foodPercent = total / calculateFootprint(storedAnswer, graph).get(2) * 100;
-        housingPercent = total / calculateFootprint(storedAnswer, graph).get(3) * 100;
-        consumptionPercent = total / calculateFootprint(storedAnswer, graph).get(4) * 100;
+        transportPercent = calculateFootprint(storedAnswer, graph).get(1);
+        foodPercent = calculateFootprint(storedAnswer, graph).get(2);
+        housingPercent = calculateFootprint(storedAnswer, graph).get(3);
+        consumptionPercent = calculateFootprint(storedAnswer, graph).get(4);
+        if (housingPercent <= 0){
+            housingPercent = 0;
+        }
 
-
-        totalFootprint = String.format("%.2f", calculateFootprint(storedAnswer, graph).get(0));
-        transportFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(1),transportPercent);
-        foodFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(2),foodPercent);
-        housingFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(3),housingPercent);
-        consumptionFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(4),consumptionPercent);
+        totalFootprint = String.format("%.2f kg CO₂", calculateFootprint(storedAnswer, graph).get(0));
+        transportFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(1),transportPercent / total * 100);
+        foodFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(2),foodPercent/ total * 100);
+        housingFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(3),housingPercent/ total * 100);
+        consumptionFootprint = String.format("%.2f kg CO₂ (%.2f%%)", calculateFootprint(storedAnswer, graph).get(4),consumptionPercent/ total * 100);
         displayResult();
-//        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-//        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//
-//        database.child("users").child(uid).setValue(userData)
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        Log.d("Database", "User data saved successfully.");
-//                    } else {
-//                        Log.e("Database", "Error saving data.", task.getException());
-//                    }
-//                });
-
+        db = FirebaseDatabase.getInstance().getReference("users");
+        auth = FirebaseAuth.getInstance();
+        currentUser = auth.getCurrentUser();
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                db.child(currentUser.getUid()).child("totalFootprint").setValue(total);
+                db.child(currentUser.getUid()).child("transportationFootprint").setValue(transportPercent);
+                db.child(currentUser.getUid()).child("foodFootprint").setValue(foodPercent);
+                db.child(currentUser.getUid()).child("houseFootprint").setValue(housingPercent);
+                db.child(currentUser.getUid()).child("consumptionFootprint").setValue(consumptionPercent);
                 navigateToCompare();
             }
         });
+
     }
     private ArrayList<Double> calculateFootprint(HashMap<Integer,String> storedAnswer, ArrayList<String[]> graph){
         double footprint = 0;
@@ -399,12 +408,12 @@ public class DisplayResultActivity extends AppCompatActivity {
 
         if(storedAnswer.get(17).equals("Yes, primarily (more than 50% of energy use)"))
         {
-            housingFootprint = housingFootprint - 6000;
+            housingFootprint = housingFootprint - 600;
         }
 
         else if(storedAnswer.get(17).equals("Yes, partially (less than 50% of energy use)"))
         {
-            housingFootprint = housingFootprint - 4000;
+            housingFootprint = housingFootprint - 400;
         }
         footprint += housingFootprint;
         double product = 0;
@@ -493,9 +502,15 @@ public class DisplayResultActivity extends AppCompatActivity {
         consumptionValue.setText(consumptionFootprint);
     }
     private void navigateToCompare(){
+        String totalStr = String.valueOf(total);
         Intent intent = new Intent(DisplayResultActivity.this, CompareActivity.class);
+        intent.putExtra("totalFootprint", totalStr);
+        intent.putExtra("countryAverage", countryAverage);
+        intent.putExtra("countryName", countryName);
+        Log.d("ddd", countryName);
+        Log.d("ddd", countryAverage);
+        Log.d("ddd", totalStr);
         startActivity(intent);
         finish();
     }
-
 }

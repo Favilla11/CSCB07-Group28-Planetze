@@ -90,7 +90,6 @@ public class CalendarActivity extends AppCompatActivity {
 
         habitList = new ArrayList<>();
 
-        String userId = currentUser.getUid();
 
 
         ImageButton backButton = findViewById(R.id.backButton);
@@ -239,7 +238,29 @@ public class CalendarActivity extends AppCompatActivity {
             emissionTextView.setText("Total Emission: " + dailyEmission + "kg CO₂");
 
         });
-        getUserHabits();
+//        getUserHabits();
+        DatabaseReference habitListRef = databaseReference.child(currentUser.getUid()).child("habitList");
+        habitListRef.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot habitSnapshot : snapshot.getChildren()) {
+                    String action = habitSnapshot.child("act").getValue(String.class);
+                    String category = habitSnapshot.child("category").getValue(String.class);
+                    Double progress = habitSnapshot.child("progress").getValue(Double.class);
+                    Double impact = habitSnapshot.child("impact").getValue(Double.class);
+                    Double frequency = habitSnapshot.child("frequency").getValue(Double.class);
+                    if (impact == null) impact = 0.0;
+                    if (progress == null) progress = 0.0;
+                    if (frequency == null) frequency = 0.0;
+                    habitList.add(new Habit(category, progress,action,impact, frequency));
+                }}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("FirebaseError", "Error fetching habits: " + error.getMessage());
+            }
+
+        });
         addActivityButton.setOnClickListener(v -> {
             // Retrieve selected values
             String category = (String) categorySpinner.getSelectedItem();
@@ -264,7 +285,7 @@ public class CalendarActivity extends AppCompatActivity {
                 case "Pork":
                 case "Chicken":
                 case "Fish":
-                case "Plant-Base":
+                case "Plant-Based":
                     hint = "Number Consume:";
                     break;
                 case "Buy New Clothes":
@@ -280,7 +301,7 @@ public class CalendarActivity extends AppCompatActivity {
 
                 case "Energy Bills":
                     hint = "Amount";
-                    detail = "Type";
+                    detail = "Type:";
                     break;
             }
 
@@ -307,13 +328,50 @@ public class CalendarActivity extends AppCompatActivity {
             if (!activitiesMap.containsKey(selectedDate)) {
                 activitiesMap.put(selectedDate, new ArrayList<>());
             }
-            Log.d("datttee", selectedDate);
             activitiesMap.get(selectedDate).add(new Activity(selectedDate, activityDescription.toString(),category, subcategory, emission));
-            for (Habit habit : habitList){
-                if (habit.getCategory().equals(subcategory) && !habit.getAct().toLowerCase().contains("no")){
-                    habit.updateProgress(1);
+
+
+            habitListRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        boolean habitUpdated = false;
+
+                        // Iterate through all habits in the list
+                        for (DataSnapshot habitSnapshot : snapshot.getChildren()) {
+                            Habit habit = habitSnapshot.getValue(Habit.class);
+
+                            // Check if the habit matches the given category
+                            if (habit != null && habit.getCategory().equals(subcategory)) {
+                                habit.updateProgress(1.0); // Update progress locally
+
+                                // Update habit in Firebase using its key
+                                habitSnapshot.getRef().setValue(habit)
+                                        .addOnSuccessListener(aVoid -> {
+                                            Log.d("FirebaseUpdate", "Habit progress updated successfully.");
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e("FirebaseUpdate", "Failed to update habit progress", e);
+                                        });
+
+                                habitUpdated = true;
+                                break; // Exit the loop after updating the habit
+                            }
+                        }
+
+                        if (!habitUpdated) {
+                            Log.d("FirebaseUpdate", "No habit found matching the given category.");
+                        }
+                    } else {
+                        Log.d("FirebaseUpdate", "Habit list is empty.");
+                    }
                 }
-            }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("FirebaseUpdate", "Error fetching habit list: " + error.getMessage());
+                }
+            });
 
 
             updateRecyclerView();
@@ -618,7 +676,7 @@ public class CalendarActivity extends AppCompatActivity {
         return result;
     }
     public void saveData(Map<String, Information> map){
-        databaseReference.child("3rwLTVZ280dKkoGEqKlgOfLv6Rf2").child("userInformation").setValue(map).addOnCompleteListener(this, task -> {
+        databaseReference.child(currentUser.getUid()).child("userInformation").setValue(map).addOnCompleteListener(this, task -> {
             if(task.isSuccessful()){
                 Log.d("mess", "saved");
             }
@@ -628,28 +686,30 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
     }
-    private void getUserHabits(){
-        DatabaseReference habitListRef = databaseReference.child("3rwLTVZ280dKkoGEqKlgOfLv6Rf2").child("habitList");
-        habitListRef.addListenerForSingleValueEvent(new ValueEventListener(){
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot habitSnapshot : snapshot.getChildren()) {
-                    String action = habitSnapshot.child("act").getValue(String.class);
-                    String category = habitSnapshot.child("category").getValue(String.class);
-                    Double progress = habitSnapshot.child("progress").getValue(Double.class);
-                    Double impact = habitSnapshot.child("impact").getValue(Double.class);
-                    if (impact == null) impact = 0.0;
-                    if (progress == null) progress = 0.0;
-                    habitList.add(new Habit(category, progress, action, impact));
-                }}
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("FirebaseError", "Error fetching habits: " + error.getMessage());
-            }
-
-        });
-    }
+//    private void getUserHabits(){
+//        DatabaseReference habitListRef = databaseReference.child("c0TTmxo4P5bJQ83snICf3m2k01u2").child("habitList");
+//        habitListRef.addListenerForSingleValueEvent(new ValueEventListener(){
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for (DataSnapshot habitSnapshot : snapshot.getChildren()) {
+//                    String action = habitSnapshot.child("act").getValue(String.class);
+//                    String category = habitSnapshot.child("category").getValue(String.class);
+//                    Double progress = habitSnapshot.child("progress").getValue(Double.class);
+//                    Double impact = habitSnapshot.child("impact").getValue(Double.class);
+//                    Double frequency = habitSnapshot.child("frequency").getValue(Double.class);
+//                    if (impact == null) impact = 0.0;
+//                    if (progress == null) progress = 0.0;
+//                    if (frequency == null) frequency = 0.0;
+//                    habitList.add(new Habit(category, progress,action,impact, frequency));
+//                }}
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.e("FirebaseError", "Error fetching habits: " + error.getMessage());
+//            }
+//
+//        });
+//    }
 //    private void fetchDataFromFirebase(OnDataFetchedListener listener) {
 //
 //

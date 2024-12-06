@@ -40,7 +40,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
     public void onBindViewHolder(@NonNull HabitAdapter.HabitViewHolder holder, int position) {
         Habit habit = habits.get(position);
         holder.action.setText(habit.getAct());
-        holder.progress.setText( habit.getProgress() +" days of " + habit.getAct());
+        holder.progress.setText( (int) habit.getProgress() +" days of " + habit.getAct());
 
     }
 

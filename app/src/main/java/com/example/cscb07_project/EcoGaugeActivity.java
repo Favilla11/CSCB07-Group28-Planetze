@@ -61,8 +61,11 @@ public class EcoGaugeActivity extends AppCompatActivity {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String userId = currentUser.getUid();
 //        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        ref.child("3rwLTVZ280dKkoGEqKlgOfLv6Rf2").addValueEventListener(new ValueEventListener() {
+        ref.child(userId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user= snapshot.getValue(User.class);
