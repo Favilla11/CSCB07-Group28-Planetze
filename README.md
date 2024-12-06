@@ -27,7 +27,7 @@ Project Structure
                 Activity, daily activities of user, String date, String description, String category, String subCategory, double emission
                 Information, all information of user, String date, String description, String category, String subCategory, double emission
                 HabitAdapter, adapts habits for view, @NonNull List<Habit> habits
-                
+                Calendar
     •    viewmodel: ViewModel classes for the MVVM architecture.
     •    util:      android.animation.ArgbEvaluator;
                     android.animation.ObjectAnimator;
@@ -72,6 +72,6 @@ Setup Guide
 
 Prerequisites
 
-    •    Android Studio [version]
-    •    Java [version] or Kotlin [version]
-    •    Required APIs/SDKs (e.g., Firebase, Google Maps)
+    •    Android Studio 2024.2.1 Patch 2
+    •    Java 17
+    •    Required APIs/SDKs Firebase
