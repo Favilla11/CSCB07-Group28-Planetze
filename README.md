@@ -3,11 +3,8 @@ Overview
     •    App Name: Planetze
     •    Description: An app to track a user's carbon footprint using their habits from a questiionaire and using them
          to suggest habits and tracks their progress to help them reduce their carbon emissions
-    •    Technologies Used:
     •    Programming Language: Java
-    •    Architecture: MVVM/MVP/MVC
     •    Database: Firebase
-    •    Other Tools/Libraries: Retrofit, Glide, etc.
 
 Project Structure
 
@@ -31,7 +28,6 @@ Project Structure
                 HabitAdapter, adapts habits for view, @NonNull List<Habit> habits
                 ActvityAdapter, adapts activities for view, List<Activity> activityList, OnActivityClickListener listener
                 User, the user of the app, String userName, String email, String password
-    •    viewmodel: ViewModel classes for the MVVM architecture.
     •    util:      android.animation.ArgbEvaluator;
                     android.animation.ObjectAnimator;
                     android.content.Intent;
@@ -66,7 +62,6 @@ Project Structure
                     java.util.Date;
                     java.util.Locale;
                     java.util.Map;
-    •    service: Background services and notifications.
     •    important Files:
     •    MainActivity.java: Entry point of the app.
     •    AndroidManifest.xml: App configuration and permissions.
