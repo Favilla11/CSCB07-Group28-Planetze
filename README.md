@@ -27,7 +27,8 @@ Project Structure
                 Activity, daily activities of user, String date, String description, String category, String subCategory, double emission
                 Information, all information of user, String date, String description, String category, String subCategory, double emission
                 HabitAdapter, adapts habits for view, @NonNull List<Habit> habits
-                Calendar
+                ActvityAdapter, adapts activities for view, List<Activity> activityList, OnActivityClickListener listener
+                User, the user of the app, String userName, String email, String password
     •    viewmodel: ViewModel classes for the MVVM architecture.
     •    util:      android.animation.ArgbEvaluator;
                     android.animation.ObjectAnimator;
