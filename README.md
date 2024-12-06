@@ -14,6 +14,8 @@ Project Structure
     •    Package Organization:
     •    com.example.cscb07_project.app
     •    ui: All UI-related components (Activities, Fragments, Adapters).
+         xml
+         androidx
     •    data: Data layer (Repositories, API clients, Database).
                     com.google.firebase.database.DataSnapshot;
                     com.google.firebase.database.DatabaseError;
