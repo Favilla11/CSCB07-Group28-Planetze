@@ -67,6 +67,7 @@ Project Structure
     •    important Files:
     •    MainActivity.java: Entry point of the app.
     •    AndroidManifest.xml: App configuration and permissions.
+         formulas.csv: Data for calculating carbon footprint
 
 Setup Guide
 
