@@ -72,7 +72,7 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
     public void navigateToHome() {
         // TODO: set after Home Activity is implemented
         // Navigate to the home screen
-        Intent intent = new Intent(this, QuestionnaireActivity.class);
+        Intent intent = new Intent(this, HomePageActivity.class);
         startActivity(intent);
         finish();
     }

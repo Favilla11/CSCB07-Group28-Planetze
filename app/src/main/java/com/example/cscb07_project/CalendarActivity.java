@@ -686,61 +686,6 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
     }
-//    private void getUserHabits(){
-//        DatabaseReference habitListRef = databaseReference.child("c0TTmxo4P5bJQ83snICf3m2k01u2").child("habitList");
-//        habitListRef.addListenerForSingleValueEvent(new ValueEventListener(){
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot habitSnapshot : snapshot.getChildren()) {
-//                    String action = habitSnapshot.child("act").getValue(String.class);
-//                    String category = habitSnapshot.child("category").getValue(String.class);
-//                    Double progress = habitSnapshot.child("progress").getValue(Double.class);
-//                    Double impact = habitSnapshot.child("impact").getValue(Double.class);
-//                    Double frequency = habitSnapshot.child("frequency").getValue(Double.class);
-//                    if (impact == null) impact = 0.0;
-//                    if (progress == null) progress = 0.0;
-//                    if (frequency == null) frequency = 0.0;
-//                    habitList.add(new Habit(category, progress,action,impact, frequency));
-//                }}
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.e("FirebaseError", "Error fetching habits: " + error.getMessage());
-//            }
-//
-//        });
-//    }
-//    private void fetchDataFromFirebase(OnDataFetchedListener listener) {
-//
-//
-//        // Fetch data
-//        databaseReference.child("3rwLTVZ280dKkoGEqKlgOfLv6Rf2").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                User user = dataSnapshot.getValue(User.class);
-//                if(user != null) {
-//                    if (user.getUserInformation().get("2024-12-4").getActivityList() != null) {
-//                        currentDateActivities = user.getUserInformation().get("2024-12-4").getActivityList();
-//                        Log.d("dsa", currentDateActivities.get(0).getDescription());
-//                        listener.onFetched(currentDateActivities);
-//                    }
-//                    else {
-//                        Log.d("No Data", "No Data");
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                // Handle error
-//                Toast.makeText(CalendarActivity.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//    interface OnDataFetchedListener {
-//        void onFetched(List<Activity> activities);
-//        void onError(Exception e);
-//    }
 }
 
 

@@ -352,7 +352,7 @@ public class HabitSuggestionActivity extends AppCompatActivity {
         });
     }
     private void realTimeAddHabit(ArrayList<Habit> habitList){
-        realtimeRef.child("c0TTmxo4P5bJQ83snICf3m2k01u2").child("habitList").setValue(habitList);
+        realtimeRef.child(userId).child("habitList").setValue(habitList);
 
     }
 

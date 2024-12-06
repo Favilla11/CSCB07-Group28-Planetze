@@ -103,7 +103,7 @@ public class SignUpActivity extends AppCompatActivity {
                             if (task1.isSuccessful()) {
                                 saveUserToDB(firebaseUser.getUid(), user, email, pass);
                                 Toast.makeText(SignUpActivity.this, "Account Created Successfully!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
+                                Intent intent = new Intent(SignUpActivity.this, WelcomePageActivity.class);
                                 startActivity(intent);
                                 finish();
                             }
@@ -127,7 +127,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
     private void saveUserToDB(String Uid, String userName, String email, String pass){
         itemRef = db.getReference("users");
-        User user = new User(userName, email, pass);
+        User user = new User(userName, email, pass, 0,0,0,0,0, null, null);
         itemRef.child(Uid).setValue(user).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d("Database", "User data saved successfully");

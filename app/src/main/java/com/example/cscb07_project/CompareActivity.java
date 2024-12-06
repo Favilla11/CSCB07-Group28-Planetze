@@ -1,4 +1,6 @@
+
 package com.example.cscb07_project;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,39 +38,33 @@ public class CompareActivity extends AppCompatActivity {
         String countryName = getIntent().getStringExtra("countryName");
         String totalFootprintStr = getIntent().getStringExtra("totalFootprint");
         String countryAverageStr = getIntent().getStringExtra("countryAverage");
-        Log.d("ddd", countryName);
-        Log.d("ddd", totalFootprintStr);
-        Log.d("ddd", countryAverageStr);
-//        double userFootprint = Double.parseDouble(totalFootprintStr)/10000;
-//        double countryAverage = Double.parseDouble(countryAverageStr);
-//        double globalTarget = 2;
+        double userFootprint = Double.parseDouble(totalFootprintStr)/10000;
+        double countryAverage = Double.parseDouble(countryAverageStr);
+        double globalTarget = 2;
 
-//        double comparisonToCountry = ((userFootprint - countryAverage) / countryAverage);
-//        double comparisonToGlobal = ((userFootprint - globalTarget) / globalTarget) * 100;
+        double comparisonToCountry = ((userFootprint - countryAverage) / countryAverage);
+        double comparisonToGlobal = ((userFootprint - globalTarget) / globalTarget) * 100;
 
         TextView countryComparisonText = findViewById(R.id.countryComparisonText);
         TextView globalComparisonText = findViewById(R.id.globalComparisonText);
         Button finishButton = findViewById(R.id.btn_goToHome);
 
-//        String countryComparisonResult = String.format("Your carbon footprint is %.2f%% %s the national average for %s.",
-//                Math.abs(comparisonToCountry),
-//                comparisonToCountry < 0 ? "below" : "above",
-//                countryName);
-//        String globalComparisonResult = String.format("Your carbon footprint is %.2f%% %s the global target.",
-//                Math.abs(comparisonToGlobal),
-//                comparisonToGlobal < 0 ? "below" : "above");
+        String countryComparisonResult = String.format("Your carbon footprint is %.2f%% %s the national average for %s.",
+                Math.abs(comparisonToCountry),
+                comparisonToCountry < 0 ? "below" : "above",
+                countryName);
+        String globalComparisonResult = String.format("Your carbon footprint is %.2f%% %s the global target.",
+                Math.abs(comparisonToGlobal),
+                comparisonToGlobal < 0 ? "below" : "above");
 
-        countryComparisonText.setText("hi");
-        globalComparisonText.setText("hi");
+        countryComparisonText.setText(countryComparisonResult);
+        globalComparisonText.setText(globalComparisonResult);
 
         // Handle button click
         finishButton.setOnClickListener(v -> {
-
-
-
-//            Intent intent = new Intent(CompareActivity.this, HomePageActivity.class);
-//            startActivity(intent);
-//            finish();
+            Intent intent = new Intent(CompareActivity.this, HomePageActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 }

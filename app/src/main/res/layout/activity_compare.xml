@@ -8,30 +8,35 @@
     android:orientation="vertical"
     android:background="@drawable/background_image"
     tools:context=".CompareActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/countryComparisonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your carbon footprint is XX% below/above the national average."
+            android:textSize="18sp"
+            android:layout_marginTop="16dp" />
 
-    <TextView
-        android:id="@+id/countryComparisonText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Your carbon footprint is XX% below/above the national average."
-        android:textSize="18sp"
-        android:layout_marginTop="16dp" />
-
-    <TextView
-        android:id="@+id/globalComparisonText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Your carbon footprint is XX% below/above the global target."
-        android:textSize="18sp" />
-    <Button
-        android:id="@+id/btn_goToHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Finish"
-        android:layout_gravity="center"
-        android:textColor="@android:color/white"
-        android:padding="12dp"
-        android:layout_marginTop="24dp" />
+        <TextView
+            android:id="@+id/globalComparisonText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Your carbon footprint is XX% below/above the global target."
+            android:textSize="18sp" />
+        <Button
+            android:id="@+id/btn_goToHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Finish"
+            android:layout_gravity="center"
+            android:textColor="@android:color/white"
+            android:padding="12dp"
+            android:layout_marginTop="24dp" />
+    </LinearLayout>
 
 </LinearLayout>

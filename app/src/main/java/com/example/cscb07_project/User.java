@@ -1,12 +1,13 @@
 package com.example.cscb07_project;
 
+import java.util.List;
 import java.util.Map;
 
 public class User {
     private String userName;
     private String email;
     private String password;
-//    private List<Habit> habitList;
+    private List<Habit> habitList;
     private double totalFootprint, transportationFootprint, foodFootprint, houseFootprint, consumptionFootprint;
     private Map<String, Information> userInformation;
 
@@ -16,6 +17,20 @@ public class User {
         this.email = email;
         this.password = password;
     }
+    public User(String userName, String email, String password, double totalFootprint,double transportationFootprint,
+                double foodFootprint,double houseFootprint, double consumptionFootprint, List<Habit> habitList, Map<String, Information> userInformation) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.foodFootprint = foodFootprint;
+        this.totalFootprint = totalFootprint;
+        this.consumptionFootprint = consumptionFootprint;
+        this.houseFootprint = houseFootprint;
+        this.transportationFootprint = transportationFootprint;
+        this.habitList = habitList;
+        this.userInformation = userInformation;
+    }
+
 
     public String getUserName() {
         return userName;
@@ -89,11 +104,11 @@ public class User {
         this.userInformation = userInformation;
     }
 
-//    public List<Habit> getHabitList() {
-//        return habitList;
-//    }
-//
-//    public void setHabitList(List<Habit> habitList) {
-//        this.habitList = habitList;
-//    }
+    public List<Habit> getHabitList() {
+        return habitList;
+    }
+
+    public void setHabitList(List<Habit> habitList) {
+        this.habitList = habitList;
+    }
 }

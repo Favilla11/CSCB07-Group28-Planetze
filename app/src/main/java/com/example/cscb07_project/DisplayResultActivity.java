@@ -55,8 +55,6 @@ public class DisplayResultActivity extends AppCompatActivity {
 
         countryName = getIntent().getStringExtra("countryName");
         countryAverage = getIntent().getStringExtra("countryAverage");
-        Log.d("ddd", countryName);
-        Log.d("ddd", countryAverage);
 
         HashMap<Integer, String> storedAnswer = (HashMap<Integer, String>) getIntent().getSerializableExtra("userResponse");
         graph = new ArrayList<>();
@@ -95,6 +93,8 @@ public class DisplayResultActivity extends AppCompatActivity {
                 db.child(currentUser.getUid()).child("foodFootprint").setValue(foodPercent);
                 db.child(currentUser.getUid()).child("houseFootprint").setValue(housingPercent);
                 db.child(currentUser.getUid()).child("consumptionFootprint").setValue(consumptionPercent);
+
+
                 navigateToCompare();
             }
         });
@@ -507,10 +507,8 @@ public class DisplayResultActivity extends AppCompatActivity {
         intent.putExtra("totalFootprint", totalStr);
         intent.putExtra("countryAverage", countryAverage);
         intent.putExtra("countryName", countryName);
-        Log.d("ddd", countryName);
-        Log.d("ddd", countryAverage);
-        Log.d("ddd", totalStr);
         startActivity(intent);
         finish();
     }
+
 }
