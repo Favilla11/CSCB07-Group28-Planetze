@@ -1,7 +1,8 @@
 Overview
 
-    •    App Name: [Name of the app]
-    •    Description: Brief description of the app’s purpose and features.
+    •    App Name: Planetze
+    •    Description: An app to track a user's carbon footprint using their habits from a questiionaire and using them to suggest habits and 
+         tracks their progress to help them reduce their carbon emissions
     •    Technologies Used:
     •    Programming Language: Java/Kotlin
     •    Architecture: MVVM/MVP/MVC
