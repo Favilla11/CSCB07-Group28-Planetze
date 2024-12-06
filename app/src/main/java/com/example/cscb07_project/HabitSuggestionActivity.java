@@ -122,7 +122,7 @@ public class HabitSuggestionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //replace with EcoTrackerMain
-                Intent intent = new Intent(HabitSuggestionActivity.this, LogInActivity.class);
+                Intent intent = new Intent(HabitSuggestionActivity.this, HomePageActivity.class);
                 startActivity(intent);
                 finish();
             }
