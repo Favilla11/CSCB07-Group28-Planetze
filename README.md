@@ -67,7 +67,6 @@ Project Structure
     •    AndroidManifest.xml: App configuration and permissions.
          formulas.csv: Data for calculating carbon footprint
 
-Setup Guide
 
 Prerequisites
 
