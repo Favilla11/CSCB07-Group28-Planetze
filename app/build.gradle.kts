@@ -50,4 +50,11 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-auth:23.1.0")
     implementation("com.google.firebase:firebase-database:20.1.0")
+    implementation ("androidx.cardview:cardview:1.0.0")
+    // Chart and graph library
+    implementation ("com.github.blackfizz:eazegraph:1.2.2@aar")
+    implementation ("com.nineoldandroids:library:2.4.0")
+
+
+    testImplementation("org.mockito:mockito-core:5.14.2")
 }

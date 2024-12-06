@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="88dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@android:color/transparent"
+            app:srcCompat="?attr/actionModeCloseDrawable" />
+
+        <!-- First Spinner: Category Selection -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please selcet your Activity"
+            android:layout_marginBottom="8dp"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:spinnerMode="dropdown" />
+
+        <!-- Second Spinner: Subcategory Selection -->
+        <TextView
+            android:id="@+id/subcategory_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Subcategory"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/subcategory_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            android:spinnerMode="dropdown" />
+
+        <!-- Third Spinner (for nested options, e.g., type of public transport) -->
+        <TextView
+            android:id="@+id/nested_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Option"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            android:textSize="16sp" />
+
+        <Spinner
+            android:id="@+id/nested_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            android:spinnerMode="dropdown" />
+
+        <!-- Dynamic Input Section -->
+        <LinearLayout
+            android:id="@+id/input_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/input_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Input Details"
+                android:layout_marginBottom="8dp"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/input_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter value"
+                android:inputType="text"
+                android:layout_marginBottom="16dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/addActivityButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Add" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/activitiesRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp" />
+
+    <TextView
+        android:id="@+id/dailyEmissionView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Total Emission: 0.0 kg CO₂"/>
+
+</LinearLayout>

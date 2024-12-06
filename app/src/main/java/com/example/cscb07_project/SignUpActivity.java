@@ -21,10 +21,14 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private FirebaseDatabase db;
+    private DatabaseReference itemRef;
     private EditText fullName, signUpEmail, signUpPassword, confirmPassword;
     private Button signUpButton;
     private TextView redictLogIn;
@@ -44,6 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseDatabase.getInstance();
 
         fullName = findViewById(R.id.CredentialEmail);
         signUpEmail = findViewById(R.id.signUpEmail);
@@ -91,14 +96,19 @@ public class SignUpActivity extends AppCompatActivity {
         else{
 
             mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this, task-> {
-
-                if (task.isSuccessful()) {
+                if(task.isSuccessful()){
                     FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                    firebaseUser.sendEmailVerification();
-                    Toast.makeText(SignUpActivity.this, "Account Created Successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SignUpActivity.this, LogInActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if (firebaseUser != null) {
+                        firebaseUser.sendEmailVerification().addOnCompleteListener(this, task1-> {
+                            if (task1.isSuccessful()) {
+                                saveUserToDB(firebaseUser.getUid(), user, email, pass);
+                                Toast.makeText(SignUpActivity.this, "Account Created Successfully!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(SignUpActivity.this, WelcomePageActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                    }
                 }
                 else {
                     try {
@@ -109,8 +119,22 @@ public class SignUpActivity extends AppCompatActivity {
                         System.out.println("Registration failed");
                     }
                 }
+
+
             });
          }
+
+    }
+    private void saveUserToDB(String Uid, String userName, String email, String pass){
+        itemRef = db.getReference("users");
+        User user = new User(userName, email, pass, 0,0,0,0,0, null, null);
+        itemRef.child(Uid).setValue(user).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d("Database", "User data saved successfully");
+            } else {
+                Log.e("Database", "Failed to save user data", task.getException());
+            }
+        });
     }
 
 

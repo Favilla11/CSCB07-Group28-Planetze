@@ -13,8 +13,53 @@
         android:theme="@style/Theme.CSCB07project"
         tools:targetApi="31">
         <activity
-            android:name=".CompareActivity"
+            android:name=".WelcomePageActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HabitSuggestionActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HomePageActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".EcoGaugeActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CalendarActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CompareActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +68,7 @@
         </activity>
         <activity
             android:name=".DisplayResultActivity"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +77,7 @@
         </activity>
         <activity
             android:name=".QuestionnaireActivity"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,12 +88,8 @@
             android:name=".ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_home" />
-        <activity
             android:name=".LogInActivity"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,7 +98,7 @@
         </activity>
         <activity
             android:name=".SignUpActivity"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
