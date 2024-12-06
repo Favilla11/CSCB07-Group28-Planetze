@@ -23,7 +23,11 @@ Project Structure
                     com.google.firebase.database.DatabaseReference;
                     com.google.firebase.database.FirebaseDatabase;
     •    model: Habit, habits to suggest to user, String category, double progress, double impact, String act, double frequency
-                Question, questions for questionaire, 
+                Question, questions for questionaire, int questionId, String questionText, String category, String[] option
+                Activity, daily activities of user, String date, String description, String category, String subCategory, double emission
+                Information, all information of user, String date, String description, String category, String subCategory, double emission
+                HabitAdapter, adapts habits for view, @NonNull List<Habit> habits
+                
     •    viewmodel: ViewModel classes for the MVVM architecture.
     •    util:      android.animation.ArgbEvaluator;
                     android.animation.ObjectAnimator;
