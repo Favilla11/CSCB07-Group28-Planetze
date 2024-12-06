@@ -9,8 +9,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public interface LogInView {
-    void showProgress();
-    void hideProgress();
     void setEmailError(String error);
     void setPasswordError(String error);
     void navigateToHome();

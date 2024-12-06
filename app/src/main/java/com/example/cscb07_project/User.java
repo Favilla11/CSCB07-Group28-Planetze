@@ -6,7 +6,7 @@ public class User {
     private String userName;
     private String email;
     private String password;
-    private List<Habit> habitList;
+//    private List<Habit> habitList;
     private double totalFootprint, transportationFootprint, foodFootprint, houseFootprint, consumptionFootprint;
     private Map<String, Information> userInformation;
 
@@ -89,11 +89,11 @@ public class User {
         this.userInformation = userInformation;
     }
 
-    public List<Habit> getHabitList() {
-        return habitList;
-    }
-
-    public void setHabitList(List<Habit> habitList) {
-        this.habitList = habitList;
-    }
+//    public List<Habit> getHabitList() {
+//        return habitList;
+//    }
+//
+//    public void setHabitList(List<Habit> habitList) {
+//        this.habitList = habitList;
+//    }
 }

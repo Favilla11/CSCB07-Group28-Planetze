@@ -6,7 +6,7 @@ public class Activity {
     private String category;
     private String subCategory;
     private double emission;
-
+    public Activity(){}
     public Activity(String date, String description, String category, String subCategory, double emission) {
         this.date = date;
         this.description = description;

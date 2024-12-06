@@ -1,25 +1,13 @@
 package com.example.cscb07_project;
 
 import android.content.Intent;
-import java.util.regex.Pattern;
-import android.util.Log;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LogInActivity extends AppCompatActivity implements LogInView {
 
@@ -27,7 +15,7 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
     private Button loginButton;
     private LogInPresenter presenter;
     private TextView redirectToSignUp;
-    private TextView forgotPasswordText;
+    private TextView forgetPassword;
 
 
     @Override
@@ -35,13 +23,23 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        emailEditText = findViewById(R.id.CredentialEmail);
+        emailEditText = findViewById(R.id.ResetPasswordCredentialEmail);
         passwordEditText = findViewById(R.id.logInPassword);
         loginButton = findViewById(R.id.logInButton);
         redirectToSignUp = findViewById(R.id.redirectToSignUp);
-        forgotPasswordText = findViewById(R.id.ForgetPassword);
+        forgetPassword = findViewById(R.id.ForgetPassword);
 
-        presenter = new LogInPresenter(this);
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LogInActivity.this, ResetPasswordActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+        presenter = new LogInPresenter(this, new LogInModel()); //
 
         loginButton.setOnClickListener(v -> {
             String email = emailEditText.getText().toString().trim();
@@ -58,25 +56,6 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
             }
         });
 
-        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LogInActivity.this, ResetPasswordActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        } );
-
-    }
-
-    @Override
-    public void showProgress() {
-        // Show a progress bar or loading indicator
-    }
-
-    @Override
-    public void hideProgress() {
-        // Hide the progress bar or loading indicator
     }
 
     @Override
@@ -93,8 +72,8 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
     public void navigateToHome() {
         // TODO: set after Home Activity is implemented
         // Navigate to the home screen
-        //Intent intent = new Intent(this, HomeActivity.class);
-        //startActivity(intent);
-        //finish();
+        Intent intent = new Intent(this, QuestionnaireActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

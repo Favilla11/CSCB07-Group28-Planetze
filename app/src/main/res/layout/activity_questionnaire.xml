@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_image"
     tools:context=".QuestionnaireActivity">
 
     <ScrollView
@@ -11,26 +12,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
-        tools:layout_editor_absoluteX="141dp"
-        tools:layout_editor_absoluteY="78dp">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:gravity="bottom|center_horizontal"
             android:orientation="vertical">
 
             <!-- Question Text -->
+
+            <!-- RadioGroup to hold the options -->
+
             <TextView
                 android:id="@+id/questionText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_height="89dp"
+                android:layout_marginTop="200dp"
+                android:layout_marginBottom="30dp"
+                android:rotationY="0"
                 android:text="Question Text"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <!-- RadioGroup to hold the options -->
             <RadioGroup
                 android:id="@+id/radioGroup"
                 android:layout_width="wrap_content"
@@ -39,21 +43,24 @@
                 android:orientation="vertical" />
 
             <!-- regionLabel selectors -->
+
+            <!-- Region Selection Spinner -->
+
+            <!-- Beef frequency selectors -->
             <TextView
                 android:id="@+id/regionLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="30dp"
                 android:text="Region:" />
 
-            <!-- Region Selection Spinner -->
             <Spinner
                 android:id="@+id/regionSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginBottom="30dp"
+                android:layout_weight="30" />
 
-            <!-- Beef frequency selectors -->
             <TextView
                 android:id="@+id/beefLabel"
                 android:layout_width="wrap_content"

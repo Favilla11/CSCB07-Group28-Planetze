@@ -61,7 +61,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/CredentialEmail"
+        android:id="@+id/ResetPasswordCredentialEmail"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/Logintext2"

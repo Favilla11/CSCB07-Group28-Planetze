@@ -5,7 +5,7 @@ import java.util.List;
 public class Information {
     private List<Activity> activityList;
     private double dailyEmission;
-
+    public Information(){}
     public Information(List<Activity> activityList, double dailyEmission){
         this.activityList = activityList;
         this.dailyEmission = dailyEmission;

@@ -1,5 +1,6 @@
 package com.example.cscb07_project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,7 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,9 +53,11 @@ public class CalendarActivity extends AppCompatActivity {
     private List<Activity> currentDateActivities;
     private ActivityAdapter activityAdapter;
     private String selectedDate;
+    private List<Habit> habitList;
     private DatabaseReference databaseReference;
     private FirebaseAuth auth;
     private FirebaseUser currentUser;
+    private ProgressBar progressBar;
 
     public double dailyEmission;
 
@@ -80,35 +85,24 @@ public class CalendarActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
+        currentDateActivities = new ArrayList<>();
 
-        List<Habit> habitList = new ArrayList<>();
+
+        habitList = new ArrayList<>();
 
         String userId = currentUser.getUid();
 
-        databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+
+        ImageButton backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // Retrieve User data
-                    User user = dataSnapshot.getValue(User.class);
-
-                    for (DataSnapshot habitSnapshot : dataSnapshot.child("habitList").getChildren()) {
-                        Habit habit = habitSnapshot.getValue(Habit.class);
-                        habitList.add(habit);
-                    }
-
-//                    user.setHabitList(habitList);
-
-                } else {
-                    Log.d("Firebase", "User does not exist.");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Error: " + databaseError.getMessage());
+            public void onClick(View v) {
+                Intent intent = new Intent(CalendarActivity.this, HomePageActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
+
 
         dailyEmission = 0;
         List<String> categories = new ArrayList<>();
@@ -217,7 +211,6 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
         activitiesMap = new HashMap<>();
-        currentDateActivities = new ArrayList<>();
         activityAdapter = new ActivityAdapter(currentDateActivities, new ActivityAdapter.OnActivityClickListener() {
             @Override
             public void onEditClick(Activity activity, int position) {
@@ -234,17 +227,19 @@ public class CalendarActivity extends AppCompatActivity {
         activitiesRecyclerView.setAdapter(activityAdapter);
 
         selectedDate = getFormattedDate(calendarView.getDate());
+        Log.d("datee", selectedDate);
         updateRecyclerView();
 
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+//            selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+            selectedDate = String.format("%d-%02d-%d", year, month + 1, dayOfMonth);
             updateRecyclerView();
-            Log.d("date", selectedDate);
+
             dailyEmission = calculateDailyEmission(selectedDate);
             emissionTextView.setText("Total Emission: " + dailyEmission + "kg CO₂");
-            Log.d("fd", dailyEmission + "");
-        });
 
+        });
+        getUserHabits();
         addActivityButton.setOnClickListener(v -> {
             // Retrieve selected values
             String category = (String) categorySpinner.getSelectedItem();
@@ -312,28 +307,28 @@ public class CalendarActivity extends AppCompatActivity {
             if (!activitiesMap.containsKey(selectedDate)) {
                 activitiesMap.put(selectedDate, new ArrayList<>());
             }
+            Log.d("datttee", selectedDate);
             activitiesMap.get(selectedDate).add(new Activity(selectedDate, activityDescription.toString(),category, subcategory, emission));
-
             for (Habit habit : habitList){
-                if (habit.getCategory().equal(subcategory)){
-                    habit.upDateProgress(1);
-                    break;
+                if (habit.getCategory().equals(subcategory) && !habit.getAct().toLowerCase().contains("no")){
+                    habit.updateProgress(1);
                 }
             }
+
+
             updateRecyclerView();
 
             inputField.setText("");
 
             dailyEmission = calculateDailyEmission(selectedDate);
             userInformation.put(selectedDate, new Information(currentDateActivities, dailyEmission));
+            Log.d("userInfo", String.valueOf(userInformation.get(selectedDate).getActivityList().get(0)));
             saveData(userInformation);
 
-            emissionTextView.setText("Total Emission: " + dailyEmission + "kg CO₂");
+            emissionTextView.setText(String.format("Total Emission: %.2f kg CO₂", dailyEmission));
 
             Toast.makeText(this, "Activity Added!", Toast.LENGTH_SHORT).show();
         });
-
-
     }
 
 
@@ -363,7 +358,7 @@ public class CalendarActivity extends AppCompatActivity {
                 userInformation.put(selectedDate, new Information(activitiesMap.get(activity.getDate()), dailyEmission));
                 saveData(userInformation);
 
-                emissionTextView.setText("Total Emission: " + dailyEmission + "kg CO₂");
+                emissionTextView.setText(String.format("Total Emission: %.2f kg CO₂", dailyEmission));
 
                 Toast.makeText(this, "Activity Updated!", Toast.LENGTH_SHORT).show();
             } else {
@@ -400,12 +395,12 @@ public class CalendarActivity extends AppCompatActivity {
         activityAdapter.notifyItemRemoved(position);
         userInformation.put(selectedDate, new Information(currentDateActivities, dailyEmission));
         saveData(userInformation);
-        emissionTextView.setText("Total Emission: " + dailyEmission + "kg CO₂");
+        emissionTextView.setText(String.format("Total Emission: %.2f kg CO₂", dailyEmission));
         Toast.makeText(this, "Activity Deleted!", Toast.LENGTH_SHORT).show();
     }
 
     private String getFormattedDate(long timeInMillis) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-d", Locale.getDefault());
         return sdf.format(new Date(timeInMillis));
     }
     public double calculateEmission(String mainType, String secondType, @Nullable String nestedOption, String userInput){
@@ -623,8 +618,70 @@ public class CalendarActivity extends AppCompatActivity {
         return result;
     }
     public void saveData(Map<String, Information> map){
-        databaseReference.child(currentUser.getUid()).child("userInformation").setValue(map);
+        databaseReference.child("3rwLTVZ280dKkoGEqKlgOfLv6Rf2").child("userInformation").setValue(map).addOnCompleteListener(this, task -> {
+            if(task.isSuccessful()){
+                Log.d("mess", "saved");
+            }
+            else{
+                Log.d("mess", "not saved");
+
+            }
+        });
     }
+    private void getUserHabits(){
+        DatabaseReference habitListRef = databaseReference.child("3rwLTVZ280dKkoGEqKlgOfLv6Rf2").child("habitList");
+        habitListRef.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot habitSnapshot : snapshot.getChildren()) {
+                    String action = habitSnapshot.child("act").getValue(String.class);
+                    String category = habitSnapshot.child("category").getValue(String.class);
+                    Double progress = habitSnapshot.child("progress").getValue(Double.class);
+                    Double impact = habitSnapshot.child("impact").getValue(Double.class);
+                    if (impact == null) impact = 0.0;
+                    if (progress == null) progress = 0.0;
+                    habitList.add(new Habit(category, progress, action, impact));
+                }}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("FirebaseError", "Error fetching habits: " + error.getMessage());
+            }
+
+        });
+    }
+//    private void fetchDataFromFirebase(OnDataFetchedListener listener) {
+//
+//
+//        // Fetch data
+//        databaseReference.child("3rwLTVZ280dKkoGEqKlgOfLv6Rf2").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                User user = dataSnapshot.getValue(User.class);
+//                if(user != null) {
+//                    if (user.getUserInformation().get("2024-12-4").getActivityList() != null) {
+//                        currentDateActivities = user.getUserInformation().get("2024-12-4").getActivityList();
+//                        Log.d("dsa", currentDateActivities.get(0).getDescription());
+//                        listener.onFetched(currentDateActivities);
+//                    }
+//                    else {
+//                        Log.d("No Data", "No Data");
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                // Handle error
+//                Toast.makeText(CalendarActivity.this, "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+//    interface OnDataFetchedListener {
+//        void onFetched(List<Activity> activities);
+//        void onError(Exception e);
+//    }
 }
+
 
 
