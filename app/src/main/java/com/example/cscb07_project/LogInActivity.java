@@ -47,6 +47,8 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
             String email = emailEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
             presenter.validateCredentials(email, password);
+            Intent intent = new Intent(LogInActivity.this, HabitSuggestionActivity.class);
+            startActivity(intent);
         });
 
         redirectToSignUp.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +74,7 @@ public class LogInActivity extends AppCompatActivity implements LogInView {
         Login_to_your_account_Text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LogInActivity.this, HabbitSuggestion.class);
+                Intent intent = new Intent(LogInActivity.this, HabitSuggestionActivity.class);
                 startActivity(intent);
                 finish();
             }

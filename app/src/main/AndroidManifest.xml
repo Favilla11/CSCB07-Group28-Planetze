@@ -13,8 +13,8 @@
         android:theme="@style/Theme.CSCB07project"
         tools:targetApi="31">
         <activity
-            android:name=".HabbitSuggestion"
-            android:exported="false"
+            android:name=".HabitSuggestionActivity"
+            android:exported="true"
             android:theme="@style/Theme.CSCB07project" />
         <activity
             android:name=".ResetPasswordActivity"

@@ -5,4 +5,6 @@ plugins {
     //alias(libs.plugins.com.google.gms:google-services:4.4.2") apply false
     //firebase setup
     //id("com.google.gms.google-services") version "4.4.2" apply false
+
 }
+
